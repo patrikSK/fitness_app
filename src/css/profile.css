@@ -1,0 +1,48 @@
+.profile-page{
+    display: flex;
+    justify-content: space-around;
+}
+
+.user-table{
+    border-collapse: collapse;
+    text-align: left;
+    margin-top: 20px;
+}
+
+.user-table td{
+    font-size: 1.3em;
+    padding: 0.2em 0.5em;
+}
+
+.user-table tr td:last-child {
+    padding: 0;
+}
+
+.user-table input{
+    border: none;
+    height: 37px;
+    padding-left: 13px;
+}
+
+.user-table input:focus{
+    outline: 1px solid var(--pink);
+}
+
+.user-table td, .user-table tr{
+    border: 1px solid var(--blue);
+}
+
+.user-table tr:nth-child(even){background-color: var(--tyrkys);}
+
+.user-table th{
+    border: none;
+    text-align: center;
+    padding: .5em;
+    font-size: 1.5em;
+}
+
+
+.profile-page p{
+    text-align: center;
+    padding: 6px 0;
+}

@@ -1,0 +1,72 @@
+.auth-page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.signup-route {
+    margin-top: 20px;
+}
+
+.logo img {
+    display: block;
+    margin: 0 auto;
+}
+
+.role-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.role-wrapper input {
+    margin-right: 5px;
+}
+
+.icon-wrapper {
+    position: relative;
+}
+
+.good-pass-icon {
+    color: green;
+    font-size: 1.5rem;
+    display: inline;
+    position: absolute;
+    top: -34px;
+    left: 64px;
+}
+
+.bad-pass-icon {
+    color: red;
+    font-size: 1.5rem;
+    display: inline;
+    position: absolute;
+    top: -34px;
+    left: 64px;
+}
+
+.password-info {
+    text-align: left;
+    padding: 10px;
+    line-height: 1.5rem;
+    background-color: var(--pink);
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+.match {
+    top: -34px;
+    left: 64px;
+}
+
+.err-message {
+    background-color: red;
+    padding: 0.3rem;
+    border-radius: 5px;
+    margin: 0.5rem;
+}
