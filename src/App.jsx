@@ -26,70 +26,55 @@ import UnrequireAuth from "./components/UnrequireAuth";
 import useAuth from "./hooks/useAuth";
 
 function App() {
-    const { setAuth } = useAuth();
+  const { setAuth } = useAuth();
 
-    useEffect(() => {
-        //check if jwt token is stored in local storage, and than mount/unmount token to every request to authorization header
-        const token = localStorage.getItem("token");
-        if (token) {
-            setAuthToken(token);
-        }
-    }, []);
+  useEffect(() => {
+    //check if jwt token is stored in local storage, and than mount/unmount token to every request to authorization header
+    const token = localStorage.getItem("token");
+    if (token) {
+      setAuthToken(token);
+    }
+  }, []);
 
-    useEffect(() => {
-        //get role from local storage and set to setAuth after page reload
-        const role = localStorage.getItem("role");
+  useEffect(() => {
+    //get role from local storage and set to setAuth after page reload
+    const role = localStorage.getItem("role");
 
-        if (role) {
-            setAuth({ role });
-        }
-    }, [setAuth]);
+    if (role) {
+      setAuth({ role });
+    }
+  }, [setAuth]);
 
-    return (
-        <div className="App">
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<Layout />}>
-                        {/*.....public route - loged user dont have access........*/}
-                        <Route element={<UnrequireAuth />}>
-                            <Route index element={<WelcomePage />} />
-                            <Route path="login" element={<LoginPage />} />
-                            <Route path="register" element={<RegisterPage />} />
-                        </Route>
-                        {/*.....user & admin routes.........*/}
-                        <Route
-                            element={
-                                <RequireAuth allowedRoles={["USER", "ADMIN"]} />
-                            }
-                        >
-                            <Route path="programs" element={<ProgramsPage />} />
-                            <Route
-                                path="exercises"
-                                element={<ExercisesPage />}
-                            />
-                            <Route
-                                path="programs/:programId"
-                                element={<ProgramPage />}
-                            />
-                            <Route
-                                path="exercise/:exerciseId"
-                                element={<ExercisePage />}
-                            />
-                            <Route path="history" element={<HistoryPage />} />
-                            <Route path="profile" element={<ProfilePage />} />
-                        </Route>
-                        {/*.......admin routes.......*/}
-                        <Route
-                            element={<RequireAuth allowedRoles={["ADMIN"]} />}
-                        >
-                            <Route path="admin" element={<AdminPage />} />
-                        </Route>
-                        <Route path="*" element={<NotFoundPage />} />
-                    </Route>
-                </Routes>
-            </BrowserRouter>
-        </div>
-    );
+  return (
+    <div className="App">
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            {/*.....public route - loged user dont have access........*/}
+            <Route element={<UnrequireAuth />}>
+              <Route index element={<WelcomePage />} />
+              <Route path="login" element={<LoginPage />} />
+              <Route path="register" element={<RegisterPage />} />
+            </Route>
+            {/*.....user & admin routes.........*/}
+            <Route element={<RequireAuth allowedRoles={["USER", "ADMIN"]} />}>
+              <Route path="programs" element={<ProgramsPage />} />
+              <Route path="exercises" element={<ExercisesPage />} />
+              <Route path="programs/:programId" element={<ProgramPage />} />
+              <Route path="exercise/:exerciseId" element={<ExercisePage />} />
+              <Route path="history" element={<HistoryPage />} />
+              <Route path="profile" element={<ProfilePage />} />
+            </Route>
+            {/*.......admin routes.......*/}
+            <Route element={<RequireAuth allowedRoles={["ADMIN"]} />}>
+              <Route path="admin" element={<AdminPage />} />
+            </Route>
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
 }
 
 export default App;
