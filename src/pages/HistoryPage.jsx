@@ -52,18 +52,22 @@ const HistoryPage = () => {
     return derivedDates;
   };
 
-  const historyList = dates.map((date) => {
+  /**
+   * this fn format date into new desired form
+   */
+  const formatDate = (date) => {
     const d = date.split("-");
     const formatedDate = `${d[2]} ${d[1]} ${d[0]}`;
+    return formatedDate;
+  };
 
-    return (
-      <HistoryRecord
-        key={formatedDate}
-        date={formatedDate}
-        exercises={records.filter((record) => record.date === date)}
-      />
-    );
-  });
+  const historyList = dates.map((date) => (
+    <HistoryRecord
+      key={date}
+      date={formatDate(date)}
+      exercises={records.filter((record) => record.date === date)}
+    />
+  ));
 
   return (
     <>
