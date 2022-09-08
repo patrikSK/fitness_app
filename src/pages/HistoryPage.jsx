@@ -21,15 +21,7 @@ const HistoryPage = () => {
           const { data } = await api.get("/history");
 
           setRecords(data.data.records);
-
-          let derivedDates = [];
-          data.data.records.forEach((exercise) => {
-            if (!derivedDates.includes(exercise.date)) {
-              derivedDates.push(exercise.date);
-            }
-          });
-
-          setDates(derivedDates);
+          setDates(deriveDates(data.data.records));
         } catch (err) {
           setErrMessage("Error: Did not receive expected data");
           console.log(err);
@@ -45,6 +37,16 @@ const HistoryPage = () => {
       };
     }
   }, []);
+
+  const deriveDates = (exercises) => {
+    let derivedDates = [];
+    exercises.forEach((exercise) => {
+      if (!derivedDates.includes(exercise.date)) {
+        derivedDates.push(exercise.date);
+      }
+    });
+    return derivedDates;
+  };
 
   const historyList = dates.map((date) => {
     const d = date.split("-");
