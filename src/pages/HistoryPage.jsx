@@ -38,11 +38,15 @@ const HistoryPage = () => {
     }
   }, []);
 
-  const deriveDates = (exercises) => {
+  /**
+   * this function creates a list of dates when the exercise was performed
+   * this dates are derived from records
+   */
+  const deriveDates = (records) => {
     let derivedDates = [];
-    exercises.forEach((exercise) => {
-      if (!derivedDates.includes(exercise.date)) {
-        derivedDates.push(exercise.date);
+    records.forEach((record) => {
+      if (!derivedDates.includes(record.date)) {
+        derivedDates.push(record.date);
       }
     });
     return derivedDates;
