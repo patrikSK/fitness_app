@@ -7,8 +7,9 @@ import "../css/search.css";
 
 const ExercisesPage = () => {
   const [exercises, setExercises] = useState([]);
-  const [searchedExercises, setSearchedExercises] = useState([]);
   const [page, setPage] = useState(1);
+
+  const [searchedExercises, setSearchedExercises] = useState([]);
   const [searchText, setSearchText] = useState("");
 
   const [isLoading, setIsLoading] = useState(true);
