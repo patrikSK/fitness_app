@@ -18,9 +18,10 @@ const ProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setInfoMessage("");
-    }, 3000);
+    }, 2000);
+    return () => clearTimeout(timer);
   }, [infoMessage]);
 
   useEffect(() => {

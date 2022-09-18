@@ -37,9 +37,10 @@ const ExercisePage = () => {
   const [overlay, setOverlay] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setInfoMessage("");
-    }, 3000);
+    }, 2000);
+    return () => clearTimeout(timer);
   }, [infoMessage]);
 
   useEffect(() => {

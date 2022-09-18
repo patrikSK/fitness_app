@@ -15,16 +15,17 @@ const ProgramsPage = () => {
 
   const [errMessage, setErrMessage] = useState("");
   const [infoMessage, setInfoMessage] = useState("");
-  const [success, setSuccess] = useState(undefined);
+  const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [overlay, setOverlay] = useState(false);
 
   console.log("rerender");
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setInfoMessage("");
-    }, 3000);
+    }, 2000);
+    return () => clearTimeout(timer);
   }, [infoMessage]);
 
   // fetch programs from database
@@ -33,9 +34,6 @@ const ProgramsPage = () => {
       const fetchPrograms = async () => {
         try {
           const res = await api.get("/programs");
-
-          console.log("fetching data");
-
           setPrograms(res.data.data);
         } catch (err) {
           setErrMessage("Error: Did not receive expected data");
@@ -143,11 +141,7 @@ const ProgramsPage = () => {
           {errMessage && <p>{errMessage}</p>}
           {!isLoading && !errMessage && (
             <ul className="exercises-wrapper">
-              {programs.length !== 0 ? (
-                programList
-              ) : (
-                <p>no available programs</p>
-              )}
+              {programs.length !== 0 ? programList : <p>no available programs</p>}
             </ul>
           )}
           {auth.role === "ADMIN" && (

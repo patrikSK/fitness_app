@@ -27,9 +27,10 @@ const ProgramPage = () => {
   const [overlay, setOverlay] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setInfoMessage("");
-    }, 3000);
+    }, 2000);
+    return () => clearTimeout(timer);
   }, [infoMessage]);
 
   useEffect(() => {
@@ -152,11 +153,7 @@ const ProgramPage = () => {
           {errMessage && <p>{errMessage}</p>}
           {!isLoading && !errMessage && (
             <ul className="exercises-wrapper">
-              {exercises.length !== 0 ? (
-                ExerciseList
-              ) : (
-                <p>no exercises available</p>
-              )}
+              {exercises.length !== 0 ? ExerciseList : <p>no exercises available</p>}
             </ul>
           )}
 

@@ -17,9 +17,10 @@ const AdminPage = () => {
   const [success, setSuccess] = useState(undefined);
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setInfoMessage("");
-    }, 3000);
+    }, 2000);
+    return () => clearTimeout(timer);
   }, [infoMessage]);
 
   // fetch users from server
