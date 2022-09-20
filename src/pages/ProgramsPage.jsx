@@ -1,25 +1,26 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 import Header from "../components/Header";
+import useFetchData from "../hooks/useFetchData";
 import UniversalBlock from "../components/UniversalBlock";
 import useAuth from "../hooks/useAuth";
 import api from "../api/api";
 import "../css/form.css";
 
 const ProgramsPage = () => {
-  const { auth } = useAuth();
-  const effectRan = useRef(false);
-
   const [programs, setPrograms] = useState([]);
   const [newProgramName, setNewProgramName] = useState("");
 
-  const [errMessage, setErrMessage] = useState("");
   const [infoMessage, setInfoMessage] = useState("");
   const [success, setSuccess] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [overlay, setOverlay] = useState(false);
 
-  console.log("rerender");
+  const { auth } = useAuth();
+  const { data, isLoading, errMessage } = useFetchData("/programs");
+
+  useEffect(() => {
+    setPrograms(data);
+  }, [data]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -27,29 +28,6 @@ const ProgramsPage = () => {
     }, 2000);
     return () => clearTimeout(timer);
   }, [infoMessage]);
-
-  // fetch programs from database
-  useEffect(() => {
-    if (effectRan.current === false) {
-      const fetchPrograms = async () => {
-        try {
-          const res = await api.get("/programs");
-          setPrograms(res.data.data);
-        } catch (err) {
-          setErrMessage("Error: Did not receive expected data");
-          console.log(err);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      fetchPrograms();
-
-      return () => {
-        effectRan.current = true;
-      };
-    }
-  }, []);
 
   // add program to database
   const createProgram = async (e) => {
