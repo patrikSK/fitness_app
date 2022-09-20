@@ -4,6 +4,7 @@ import UniversalBlock from "../components/UniversalBlock";
 import Header from "../components/Header";
 import api from "../api/api";
 import "../css/search.css";
+import { useCallback } from "react";
 
 const ExercisesPage = () => {
   const [exercises, setExercises] = useState([]);
@@ -15,22 +16,22 @@ const ExercisesPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [errMessage, setErrMessage] = useState("");
 
-  useEffect(() => {
-    const fetchExercises = async () => {
-      try {
-        const { data } = await api.get(`/exercises?page=${page}&limit=9`);
+  const fetchExercises = useCallback(async () => {
+    try {
+      const { data } = await api.get(`/exercises?page=${page}&limit=9`);
 
-        setExercises(data.data);
-      } catch (err) {
-        setErrMessage("Error: Did not receive expected data");
-        console.log(err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchExercises();
+      setExercises(data.data);
+    } catch (err) {
+      setErrMessage("Error: Did not receive expected data");
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
   }, [page]);
+
+  useEffect(() => {
+    fetchExercises();
+  }, [fetchExercises]);
 
   const prevPage = () => {
     setPage((prev) => prev - 1);
@@ -40,19 +41,19 @@ const ExercisesPage = () => {
     setPage((prev) => prev + 1);
   };
 
-  useEffect(() => {
-    const searchExercises = async () => {
-      try {
-        const { data } = await api.get(`/exercises?search=${searchText}`);
+  const searchExercises = useCallback(async () => {
+    try {
+      const { data } = await api.get(`/exercises?search=${searchText}`);
 
-        setSearchedExercises(data.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    searchExercises();
+      setSearchedExercises(data.data);
+    } catch (err) {
+      console.log(err);
+    }
   }, [searchText]);
+
+  useEffect(() => {
+    searchExercises();
+  }, [searchExercises]);
 
   const ExerciseList = exercises.map((exercise) => {
     return (
