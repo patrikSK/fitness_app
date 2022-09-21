@@ -16,8 +16,9 @@ const ProgramsPage = () => {
   const [overlay, setOverlay] = useState(false);
 
   const { auth } = useAuth();
-  const { data, isLoading, errMessage } = useFetchData("/programs");
 
+  // fetch data on first page loading
+  const { data, isLoading, errMessage } = useFetchData("/programs");
   useEffect(() => {
     setPrograms(data);
   }, [data]);

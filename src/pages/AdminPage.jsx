@@ -1,20 +1,20 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
 import Header from "../components/Header";
+import useFetchData from "../hooks/useFetchData";
 import api from "../api/api";
 import "../css/admin.css";
 
 const AdminPage = () => {
-  const effectRan = useRef(false);
-
   const [allUsers, setAllUsers] = useState([]);
   const [user, setUser] = useState({});
   const [date, setDate] = useState("");
 
   const [overlay, setOverlay] = useState(false);
-  const [errMessage, setErrMessage] = useState("");
+  const [errMessageUserDetail, setErrMessageUserDetail] = useState("");
+
   const [infoMessage, setInfoMessage] = useState("");
-  const [success, setSuccess] = useState(undefined);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -23,27 +23,17 @@ const AdminPage = () => {
     return () => clearTimeout(timer);
   }, [infoMessage]);
 
-  // fetch users from server
+  // fetch list of users from server
+  const {
+    data: usersData,
+    isLoading: isLoadingUsers,
+    errMessage: errMessageUsers,
+  } = useFetchData("/users/allUsers");
   useEffect(() => {
-    if (effectRan.current === false) {
-      const fetchAllUsers = async () => {
-        try {
-          const { data } = await api.get("/users/allUsers");
-          setAllUsers(data.data);
-        } catch (err) {
-          console.log(err);
-          setErrMessage("Error: Did not receive expected data");
-        }
-      };
+    setAllUsers(usersData);
+  }, [usersData]);
 
-      fetchAllUsers();
-
-      return () => {
-        effectRan.current = true;
-      };
-    }
-  }, []);
-
+  // fetch single user data from server and show
   const showUserDetails = async (e, id) => {
     e.preventDefault();
 
@@ -54,7 +44,7 @@ const AdminPage = () => {
       setOverlay(true);
     } catch (err) {
       console.log(err);
-      setErrMessage("Error: Did not receive expected data");
+      setErrMessageUserDetail("Error: Did not receive users data");
     }
   };
 
@@ -125,9 +115,10 @@ const AdminPage = () => {
       <main className="admin-page">
         <div className="container">
           <div className="user-list-wrapper">
+            {isLoadingUsers && <p>Loading...</p>}
             <h3>list of all users, tap to show details</h3>
-            {errMessage && <p>{errMessage}</p>}
-            {!errMessage && (
+            {errMessageUsers && <p>{errMessageUsers}</p>}
+            {!errMessageUsers && !isLoadingUsers && (
               <table>
                 <tbody>
                   <tr>
@@ -141,8 +132,8 @@ const AdminPage = () => {
             )}
           </div>
 
-          {errMessage && <p>{errMessage}</p>}
-          {overlay === true && !errMessage && (
+          {errMessageUserDetail && <p>{errMessageUserDetail}</p>}
+          {overlay === true && !errMessageUserDetail && (
             <div className="overlay" onClick={(e) => handleOverlayClose(e)}>
               <div className="user-detail">
                 <h3>detail of user: {user.nickName}</h3>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import Header from "../components/Header";
+import useFetchData from "../hooks/useFetchData";
 import api from "../api/api";
 import "../css/profile.css";
 
@@ -12,10 +13,19 @@ const ProfilePage = () => {
     age: 0,
   });
 
-  const [errMessage, setErrMessage] = useState("");
   const [infoMessage, setInfoMessage] = useState("");
-  const [success, setSuccess] = useState(undefined);
-  const [isLoading, setIsLoading] = useState(true);
+  const [success, setSuccess] = useState(false);
+
+  // fetch user
+  const { data, isLoading, errMessage } = useFetchData("/users/user");
+  useEffect(() => {
+    setUser({
+      name: data.name,
+      surname: data.surname,
+      nickName: data.nickName,
+      age: data.age,
+    });
+  }, [data]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -23,27 +33,6 @@ const ProfilePage = () => {
     }, 2000);
     return () => clearTimeout(timer);
   }, [infoMessage]);
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const { data } = await api.get("/users/user");
-        setUser({
-          name: data.data.name,
-          surname: data.data.surname,
-          nickName: data.data.nickName,
-          age: data.data.age,
-        });
-      } catch (err) {
-        setErrMessage("Error: Did not receive expected data");
-        console.log(err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchUserData();
-  }, []);
 
   const updateUserData = async (e) => {
     e.preventDefault();
@@ -61,8 +50,8 @@ const ProfilePage = () => {
     };
 
     try {
-      await api.put(url, data, headers);
-
+      const res = await api.put(url, data, headers);
+      console.log(res);
       // set message
       setInfoMessage("your info was successfully updated");
       setSuccess(true);

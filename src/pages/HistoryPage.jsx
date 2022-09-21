@@ -1,48 +1,28 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 import Header from "../components/Header";
+import useFetchData from "../hooks/useFetchData";
 import HistoryRecord from "../components/HistoryRecord";
-import api from "../api/api";
 import "../css/history.css";
 
 const HistoryPage = () => {
-  const effectRan = useRef(false);
-
   const [records, setRecords] = useState([]);
   const [dates, setDates] = useState([]);
 
-  const [errMessage, setErrMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-
+  // fetch user
+  const { data, isLoading, errMessage } = useFetchData("/history");
   useEffect(() => {
-    if (effectRan.current === false) {
-      const fetchRecordsFromHistory = async () => {
-        try {
-          const { data } = await api.get("/history");
-
-          setRecords(data.data.records);
-          setDates(deriveDates(data.data.records));
-        } catch (err) {
-          setErrMessage("Error: Did not receive expected data");
-          console.log(err);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      fetchRecordsFromHistory();
-
-      return () => {
-        effectRan.current = true;
-      };
-    }
-  }, []);
+    setRecords(data.records);
+    setDates(deriveDates(data.records));
+  }, [data]);
 
   /**
-   * this function creates a list of dates when the exercise was performed
+   * @param {records[]} - array of records
+   * this function creates a list of dates, when the exercise was performed
    * this dates are derived from records
+   * @returns {deriveDates[]} - return array of unique dates
    */
-  const deriveDates = (records) => {
+  const deriveDates = (records = []) => {
     let derivedDates = [];
     records.forEach((record) => {
       if (!derivedDates.includes(record.date)) {
@@ -53,9 +33,11 @@ const HistoryPage = () => {
   };
 
   /**
+   * @param {string} - date, when exercise was performed
    * this fn format date into new desired form
+   * @returns {string} - date in human readable format: '29 08 2022'
    */
-  const formatDate = (date) => {
+  const formatDate = (date = "") => {
     const d = date.split("-");
     const formatedDate = `${d[2]} ${d[1]} ${d[0]}`;
     return formatedDate;

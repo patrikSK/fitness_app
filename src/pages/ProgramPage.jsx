@@ -1,13 +1,13 @@
 import { useParams, useLocation } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 import Header from "../components/Header";
 import useAuth from "../hooks/useAuth";
+import useFetchData from "../hooks/useFetchData";
 import UniversalBlock from "../components/UniversalBlock";
 import api from "../api/api";
 
 const ProgramPage = () => {
-  const effectRan = useRef(false);
   const { auth } = useAuth();
   const location = useLocation();
   const { program } = location.state;
@@ -22,8 +22,6 @@ const ProgramPage = () => {
 
   const [infoMessage, setInfoMessage] = useState("");
   const [success, setSuccess] = useState(undefined);
-  const [errMessage, setErrMessage] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [overlay, setOverlay] = useState(false);
 
   useEffect(() => {
@@ -33,28 +31,13 @@ const ProgramPage = () => {
     return () => clearTimeout(timer);
   }, [infoMessage]);
 
+  // fetch data on first page loading
+  const { data, isLoading, errMessage } = useFetchData(
+    `/exercises?programID=${programId}`
+  );
   useEffect(() => {
-    if (effectRan.current === false) {
-      const fetchExercises = async () => {
-        try {
-          const { data } = await api.get(`/exercises?programID=${programId}`);
-
-          setExercises(data.data);
-        } catch (err) {
-          setErrMessage("Error: Did not receive expected data");
-          console.log(err);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      fetchExercises();
-
-      return () => {
-        effectRan.current = true;
-      };
-    }
-  }, [programId]);
+    setExercises(data);
+  }, [data, programId]);
 
   // add Exercise to database
   const createExercise = async (e) => {
