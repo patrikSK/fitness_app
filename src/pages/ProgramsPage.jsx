@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import Header from "../components/Header";
 import useFetchData from "../hooks/useFetchData";
+import useCloseOverlay from "../hooks/useCloseOverlay";
 import UniversalBlock from "../components/UniversalBlock";
 import useAuth from "../hooks/useAuth";
 import api from "../api/api";
@@ -16,6 +17,14 @@ const ProgramsPage = () => {
   const [overlay, setOverlay] = useState(false);
 
   const { auth } = useAuth();
+
+  const overlayRef = useRef(null);
+  const { closeOverlayOnClick, closeOverlayOnEscape } = useCloseOverlay();
+  useEffect(() => {
+    if (overlayRef.current) {
+      overlayRef.current.focus();
+    }
+  }, [overlay]);
 
   // fetch data on first page loading
   const { data, isLoading, errMessage } = useFetchData("/programs");
@@ -81,24 +90,6 @@ const ProgramsPage = () => {
     }
   };
 
-  const handleOverlayClose = (e) => {
-    if (e.target === e.currentTarget) {
-      setOverlay(false);
-    }
-
-    if (e.key === "Escape") {
-      setOverlay(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("keydown", handleOverlayClose);
-
-    return () => {
-      document.removeEventListener("keydown", handleOverlayClose);
-    };
-  }, []);
-
   const programList = programs.map((program) => {
     return (
       <UniversalBlock
@@ -130,7 +121,13 @@ const ProgramsPage = () => {
           )}
 
           {auth.role === "ADMIN" && overlay === true && (
-            <div className="overlay" onClick={(e) => handleOverlayClose(e)}>
+            <div
+              ref={overlayRef}
+              className="overlay"
+              tabIndex={-1}
+              onKeyDown={(e) => setOverlay(closeOverlayOnEscape(e))}
+              onClick={(e) => setOverlay(closeOverlayOnClick(e))}
+            >
               <div className="form">
                 <h3>create a new program</h3>
                 <form onSubmit={createProgram}>
