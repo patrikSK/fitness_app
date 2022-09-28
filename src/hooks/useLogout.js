@@ -1,17 +1,15 @@
-import useRole from "../hooks/useRole";
+import useRole from "./useRole";
 import api from "../api/api";
 
-const Logout = () => {
+const useLogout = () => {
   const { setRole } = useRole();
 
-  const logout = () => {
+  return () => {
     delete api.defaults.headers.common["Authorization"];
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     setRole("");
   };
-
-  return <span onClick={logout}>log out</span>;
 };
 
-export default Logout;
+export default useLogout;

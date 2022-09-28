@@ -2,7 +2,7 @@ import { useState } from "react";
 import CustomLink from "./CustomLink";
 import useRole from "../hooks/useRole";
 
-import Logout from "./Logout";
+import useLogout from "../hooks/useLogout";
 import "../css/navbar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -20,6 +20,8 @@ const Navbar = () => {
   const toggleMenu = () => {
     setHidden(!hidden);
   };
+
+  const logout = useLogout();
 
   return (
     <>
@@ -56,8 +58,16 @@ const Navbar = () => {
                       </CustomLink>
                     </>
                   )}
-                  <CustomLink className="logout" to="/" replace onClick={toggleMenu}>
-                    <Logout />
+                  <CustomLink
+                    className="logout"
+                    to="/"
+                    replace
+                    onClick={() => {
+                      logout();
+                      toggleMenu();
+                    }}
+                  >
+                    Logout
                   </CustomLink>
                 </div>
               </div>
