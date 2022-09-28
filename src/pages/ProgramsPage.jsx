@@ -93,6 +93,8 @@ const ProgramsPage = () => {
     }
   };
 
+  console.log(programs);
+
   const programList = programs.map((program) => {
     return (
       <UniversalBlock
