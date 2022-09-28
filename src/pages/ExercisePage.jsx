@@ -2,6 +2,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import Header from "../components/Header";
+import InfoMessage from "../components/InfoMessage";
 import useRole from "../hooks/useRole";
 import api from "../api/api";
 import "../css/exercisePage.css";
@@ -35,13 +36,7 @@ const ExercisePage = () => {
   const [infoMessage, setInfoMessage] = useState("");
   const [success, setSuccess] = useState(undefined);
   const [overlay, setOverlay] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setInfoMessage("");
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, [infoMessage]);
+  const closeInfoMessage = () => setInfoMessage("");
 
   useEffect(() => {
     setExercise({
@@ -272,16 +267,11 @@ const ExercisePage = () => {
           )}
         </div>
 
-        {infoMessage !== "" && (
-          <p
-            className="info-message"
-            style={{
-              background: success ? "#59f750" : "#c4090a",
-            }}
-          >
-            {infoMessage}
-          </p>
-        )}
+        <InfoMessage
+          message={infoMessage}
+          success={success}
+          closeInfoMessage={closeInfoMessage}
+        />
       </main>
     </>
   );

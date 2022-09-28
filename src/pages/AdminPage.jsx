@@ -1,37 +1,28 @@
 import { useEffect, useState } from "react";
 
+import InfoMessage from "../components/InfoMessage";
 import Header from "../components/Header";
 import useFetchData from "../hooks/useFetchData";
 import api from "../api/api";
 import "../css/admin.css";
 
 const AdminPage = () => {
-  const [allUsers, setAllUsers] = useState([]);
   const [user, setUser] = useState({});
   const [date, setDate] = useState("");
+  const [errMessageUserDetail, setErrMessageUserDetail] = useState("");
 
   const [overlay, setOverlay] = useState(false);
-  const [errMessageUserDetail, setErrMessageUserDetail] = useState("");
 
   const [infoMessage, setInfoMessage] = useState("");
   const [success, setSuccess] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setInfoMessage("");
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, [infoMessage]);
+  const closeInfoMessage = () => setInfoMessage("");
 
   // fetch list of users from server
   const {
-    data: usersData,
+    data: allUsers,
     isLoading: isLoadingUsers,
     errMessage: errMessageUsers,
   } = useFetchData("/users/allUsers");
-  useEffect(() => {
-    setAllUsers(usersData);
-  }, [usersData]);
 
   // fetch single user data from server and show
   const showUserDetails = async (e, id) => {
@@ -184,16 +175,11 @@ const AdminPage = () => {
           )}
         </div>
 
-        {infoMessage !== "" && (
-          <p
-            className="info-message"
-            style={{
-              background: success ? "#59f750" : "#c4090a",
-            }}
-          >
-            {infoMessage}
-          </p>
-        )}
+        <InfoMessage
+          message={infoMessage}
+          success={success}
+          closeInfoMessage={closeInfoMessage}
+        />
       </main>
     </>
   );

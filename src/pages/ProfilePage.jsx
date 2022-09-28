@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import Header from "../components/Header";
+import InfoMessage from "../components/InfoMessage";
 import useFetchData from "../hooks/useFetchData";
 import api from "../api/api";
 import "../css/profile.css";
@@ -15,6 +16,7 @@ const ProfilePage = () => {
 
   const [infoMessage, setInfoMessage] = useState("");
   const [success, setSuccess] = useState(false);
+  const closeInfoMessage = () => setInfoMessage("");
 
   // fetch user
   const { data, isLoading, errMessage } = useFetchData("/users/user");
@@ -26,13 +28,6 @@ const ProfilePage = () => {
       age: data.age,
     });
   }, [data]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setInfoMessage("");
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, [infoMessage]);
 
   const updateUserData = async (e) => {
     e.preventDefault();
@@ -50,8 +45,8 @@ const ProfilePage = () => {
     };
 
     try {
-      const res = await api.put(url, data, headers);
-      console.log(res);
+      await api.put(url, data, headers);
+
       // set message
       setInfoMessage("your info was successfully updated");
       setSuccess(true);
@@ -157,16 +152,11 @@ const ProfilePage = () => {
           )}
         </div>
 
-        {infoMessage !== "" && (
-          <p
-            className="info-message"
-            style={{
-              background: success ? "#59f750" : "#c4090a",
-            }}
-          >
-            {infoMessage}
-          </p>
-        )}
+        <InfoMessage
+          message={infoMessage}
+          success={success}
+          closeInfoMessage={closeInfoMessage}
+        />
       </main>
     </>
   );

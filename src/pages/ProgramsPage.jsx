@@ -17,9 +17,11 @@ const ProgramsPage = () => {
   const [programs, setPrograms] = useState([]);
   const [newProgramName, setNewProgramName] = useState("");
 
+  const [overlay, setOverlay] = useState(false);
+
   const [infoMessage, setInfoMessage] = useState("");
   const [success, setSuccess] = useState(false);
-  const [overlay, setOverlay] = useState(false);
+  const closeInfoMessage = () => setInfoMessage("");
 
   const { role } = useRole();
 
@@ -39,8 +41,6 @@ const ProgramsPage = () => {
   useEffect(() => {
     setPrograms(data);
   }, [data]);
-
-  const closeInfoMessage = () => setInfoMessage("");
 
   // add program to database
   const createProgram = async (e) => {

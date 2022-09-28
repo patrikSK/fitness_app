@@ -1,10 +1,15 @@
 import { useParams, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 
+// components
 import Header from "../components/Header";
+import InfoMessage from "../components/InfoMessage";
+import UniversalBlock from "../components/UniversalBlock";
+
+// hooks
 import useRole from "../hooks/useRole";
 import useFetchData from "../hooks/useFetchData";
-import UniversalBlock from "../components/UniversalBlock";
+
 import api from "../api/api";
 
 const ProgramPage = () => {
@@ -23,13 +28,7 @@ const ProgramPage = () => {
   const [infoMessage, setInfoMessage] = useState("");
   const [success, setSuccess] = useState(undefined);
   const [overlay, setOverlay] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setInfoMessage("");
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, [infoMessage]);
+  const closeInfoMessage = () => setInfoMessage("");
 
   // fetch data on first page loading
   const { data, isLoading, errMessage } = useFetchData(
@@ -206,16 +205,11 @@ const ProgramPage = () => {
           )}
         </div>
 
-        {infoMessage !== "" && (
-          <p
-            className="info-message"
-            style={{
-              background: success ? "#59f750" : "#c4090a",
-            }}
-          >
-            {infoMessage}
-          </p>
-        )}
+        <InfoMessage
+          message={infoMessage}
+          success={success}
+          closeInfoMessage={closeInfoMessage}
+        />
       </main>
     </>
   );
