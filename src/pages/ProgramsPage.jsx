@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
 // hooks
-import useAuth from "../hooks/useAuth";
+import useRole from "../hooks/useRole";
 import useFetchData from "../hooks/useFetchData";
 import useCloseOverlay from "../hooks/useCloseOverlay";
 
@@ -21,7 +21,7 @@ const ProgramsPage = () => {
   const [success, setSuccess] = useState(false);
   const [overlay, setOverlay] = useState(false);
 
-  const { auth } = useAuth();
+  const { role } = useRole();
 
   // handle close overlay(modal)
   // catch overlay element
@@ -117,13 +117,13 @@ const ProgramsPage = () => {
               {programs.length !== 0 ? programList : <p>no available programs</p>}
             </ul>
           )}
-          {auth.role === "ADMIN" && (
+          {role === "ADMIN" && (
             <div className="button-wrapper">
               <button onClick={() => setOverlay(true)}>add new program</button>
             </div>
           )}
 
-          {auth.role === "ADMIN" && overlay === true && (
+          {role === "ADMIN" && overlay === true && (
             <div
               ref={overlayRef}
               className="overlay"

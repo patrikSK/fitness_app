@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 
-import useAuth from "../hooks/useAuth";
+import useRole from "../hooks/useRole";
 import "../css/exercise.css";
 
 //universal box for programs and exercises
 const UniversalBlock = ({ item, deleteItem, url, itemName }) => {
-  const { auth } = useAuth();
+  const { role } = useRole();
 
   return (
     <li className="exercise-element">
@@ -13,7 +13,7 @@ const UniversalBlock = ({ item, deleteItem, url, itemName }) => {
         <p>{item.name}</p>
       </Link>
 
-      {auth.role === "ADMIN" && deleteItem && (
+      {role === "ADMIN" && deleteItem && (
         <div className="delete-button-wrapper">
           <button onClick={(e) => deleteItem(e, item.id)}>delete</button>
         </div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import CustomLink from "./CustomLink";
-import useAuth from "../hooks/useAuth";
+import useRole from "../hooks/useRole";
 
 import Logout from "./Logout";
 import "../css/navbar.css";
@@ -13,7 +13,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const Navbar = () => {
-  const { auth } = useAuth();
+  const { role } = useRole();
 
   const [hidden, setHidden] = useState(true);
 
@@ -23,7 +23,7 @@ const Navbar = () => {
 
   return (
     <>
-      {(auth.role === "USER" || auth.role === "ADMIN") && (
+      {(role === "USER" || role === "ADMIN") && (
         <nav className="navbar">
           <div className="container">
             <div className="navbar-logo"></div>
@@ -49,19 +49,14 @@ const Navbar = () => {
                   <CustomLink to="profile" onClick={toggleMenu}>
                     profile
                   </CustomLink>
-                  {auth.role === "ADMIN" && (
+                  {role === "ADMIN" && (
                     <>
                       <CustomLink to="admin" onClick={toggleMenu}>
                         admin
                       </CustomLink>
                     </>
                   )}
-                  <CustomLink
-                    className="logout"
-                    to="/"
-                    replace
-                    onClick={toggleMenu}
-                  >
+                  <CustomLink className="logout" to="/" replace onClick={toggleMenu}>
                     <Logout />
                   </CustomLink>
                 </div>

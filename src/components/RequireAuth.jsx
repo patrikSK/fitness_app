@@ -1,12 +1,12 @@
 import { Navigate, Outlet } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+import useRole from "../hooks/useRole";
 
 //creates protected routes wrapper
 const RequireAuth = ({ allowedRoles }) => {
   // laod roles from context
-  const { auth } = useAuth();
+  const { role } = useRole();
 
-  if (allowedRoles.includes(auth.role)) {
+  if (allowedRoles.includes(role)) {
     return <Outlet />;
   } else {
     return <Navigate to="/login" replace />;

@@ -2,7 +2,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import { setAuthToken } from "../helpers/setAuthToken";
-import useAuth from "../hooks/useAuth";
+import useRole from "../hooks/useRole";
 import logo from "../images/logo.png";
 import "../css/auth.css";
 import api from "../api/api";
@@ -10,7 +10,7 @@ import api from "../api/api";
 const LoginPage = () => {
   let navigate = useNavigate();
 
-  const { setAuth } = useAuth();
+  const { setRole } = useRole();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -41,7 +41,7 @@ const LoginPage = () => {
       const role = res.data.role;
 
       // store role to the context
-      setAuth({ role });
+      setRole(role);
 
       //set user role and JWT token to local storage
       localStorage.setItem("role", role);

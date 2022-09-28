@@ -2,13 +2,13 @@ import { useParams, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import Header from "../components/Header";
-import useAuth from "../hooks/useAuth";
+import useRole from "../hooks/useRole";
 import useFetchData from "../hooks/useFetchData";
 import UniversalBlock from "../components/UniversalBlock";
 import api from "../api/api";
 
 const ProgramPage = () => {
-  const { auth } = useAuth();
+  const { role } = useRole();
   const location = useLocation();
   const { program } = location.state;
   const { programId } = useParams();
@@ -140,13 +140,13 @@ const ProgramPage = () => {
             </ul>
           )}
 
-          {auth.role === "ADMIN" && (
+          {role === "ADMIN" && (
             <div className="button-wrapper">
               <button onClick={() => setOverlay(true)}>add new exercise</button>
             </div>
           )}
 
-          {auth.role === "ADMIN" && overlay === true && (
+          {role === "ADMIN" && overlay === true && (
             <div className="overlay" onClick={(e) => handleOverlayClose(e)}>
               <div className="form new-exercise">
                 <h3>create a new Exercise</h3>

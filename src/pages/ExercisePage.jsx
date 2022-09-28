@@ -2,7 +2,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import Header from "../components/Header";
-import useAuth from "../hooks/useAuth";
+import useRole from "../hooks/useRole";
 import api from "../api/api";
 import "../css/exercisePage.css";
 
@@ -10,7 +10,7 @@ const ExercisePage = () => {
   const location = useLocation();
   const { exrcs } = location.state;
   const { programId } = useParams();
-  const { auth } = useAuth();
+  const { role } = useRole();
 
   const [exercise, setExercise] = useState({
     id: undefined,
@@ -191,13 +191,13 @@ const ExercisePage = () => {
             </form>
           </div>
 
-          {auth.role === "ADMIN" && (
+          {role === "ADMIN" && (
             <div className="button-wrapper">
               <button onClick={() => setOverlay(true)}>update exercise</button>
             </div>
           )}
 
-          {auth.role === "ADMIN" && overlay === true && (
+          {role === "ADMIN" && overlay === true && (
             <div className="overlay" onClick={(e) => handleOverlayClose(e)}>
               <div className="form">
                 <h3>update Exercise</h3>

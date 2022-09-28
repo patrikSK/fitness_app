@@ -1,11 +1,11 @@
 import { Navigate, Outlet } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+import useRole from "../hooks/useRole";
 
 // this routes user can not see if is loged in
 const UnrequireAuth = () => {
-  const { auth } = useAuth();
+  const { role } = useRole();
 
-  if (auth.role === "ADMIN" || auth.role === "USER") {
+  if (role === "ADMIN" || role === "USER") {
     return <Navigate to="programs" />;
   } else {
     return <Outlet />;

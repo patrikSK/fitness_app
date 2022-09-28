@@ -23,10 +23,10 @@ import RequireAuth from "./components/RequireAuth";
 import UnrequireAuth from "./components/UnrequireAuth";
 
 //custom hooks
-import useAuth from "./hooks/useAuth";
+import useRole from "./hooks/useRole";
 
 function App() {
-  const { setAuth } = useAuth();
+  const { setRole } = useRole();
 
   useEffect(() => {
     //check if jwt token is stored in local storage, and than mount/unmount token to every request to authorization header
@@ -41,9 +41,9 @@ function App() {
     const role = localStorage.getItem("role");
 
     if (role) {
-      setAuth({ role });
+      setRole({ role });
     }
-  }, [setAuth]);
+  }, [setRole]);
 
   return (
     <div className="App">

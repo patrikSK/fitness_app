@@ -5,13 +5,13 @@ import "./css/index.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import { AuthProvider } from "./context/AuthProvider";
+import { RoleProvider } from "./context/RoleProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-    <React.StrictMode>
-        <AuthProvider>
-            <App />
-        </AuthProvider>
-    </React.StrictMode>
+  <React.StrictMode>
+    <RoleProvider>
+      <App />
+    </RoleProvider>
+  </React.StrictMode>
 );
