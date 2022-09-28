@@ -1,11 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 
-import Header from "../components/Header";
+// hooks
+import useAuth from "../hooks/useAuth";
 import useFetchData from "../hooks/useFetchData";
 import useCloseOverlay from "../hooks/useCloseOverlay";
+
+// components
+import Header from "../components/Header";
 import InfoMessage from "../components/InfoMessage";
 import UniversalBlock from "../components/UniversalBlock";
-import useAuth from "../hooks/useAuth";
+
 import api from "../api/api";
 import "../css/form.css";
 
