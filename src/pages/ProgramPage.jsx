@@ -1,5 +1,5 @@
 import { useParams, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 // components
 import Header from "../components/Header";
@@ -9,6 +9,7 @@ import UniversalBlock from "../components/UniversalBlock";
 // hooks
 import useRole from "../hooks/useRole";
 import useFetchData from "../hooks/useFetchData";
+import useCloseOverlay from "../hooks/useCloseOverlay";
 
 import api from "../api/api";
 
@@ -29,6 +30,13 @@ const ProgramPage = () => {
   const [success, setSuccess] = useState(undefined);
   const [overlay, setOverlay] = useState(false);
   const closeInfoMessage = () => setInfoMessage("");
+
+  // handle close overlay(modal)
+  const overlayRef = useRef(null);
+  const { closeOverlayOnClick, closeOverlayOnEscape } = useCloseOverlay();
+  useEffect(() => {
+    overlayRef.current && overlayRef.current.focus();
+  }, [overlay]);
 
   // fetch data on first page loading
   const { data, isLoading, errMessage } = useFetchData(
@@ -96,24 +104,6 @@ const ProgramPage = () => {
     }
   };
 
-  const handleOverlayClose = (e) => {
-    if (e.target === e.currentTarget) {
-      setOverlay(false);
-    }
-
-    if (e.key === "Escape") {
-      setOverlay(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("keydown", handleOverlayClose);
-
-    return () => {
-      document.removeEventListener("keydown", handleOverlayClose);
-    };
-  }, []);
-
   const ExerciseList = exercises.map((exercise) => {
     return (
       <UniversalBlock
@@ -146,7 +136,13 @@ const ProgramPage = () => {
           )}
 
           {role === "ADMIN" && overlay === true && (
-            <div className="overlay" onClick={(e) => handleOverlayClose(e)}>
+            <div
+              ref={overlayRef}
+              className="overlay"
+              tabIndex={-1}
+              onKeyDown={(e) => setOverlay(closeOverlayOnEscape(e))}
+              onClick={(e) => setOverlay(closeOverlayOnClick(e))}
+            >
               <div className="form new-exercise">
                 <h3>create a new Exercise</h3>
                 <form onSubmit={createExercise}>

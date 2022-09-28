@@ -14,7 +14,6 @@ const useFetchData = (dataUrl) => {
         try {
           const res = await api.get(url);
           setData(res.data.data);
-          console.log("alles gut");
         } catch (err) {
           setErrMessage("Error: Did not receive expected data");
           console.log(err);

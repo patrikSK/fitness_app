@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import InfoMessage from "../components/InfoMessage";
 import Header from "../components/Header";
 import useFetchData from "../hooks/useFetchData";
+import useCloseOverlay from "../hooks/useCloseOverlay";
 import api from "../api/api";
 import "../css/admin.css";
 
@@ -16,6 +17,13 @@ const AdminPage = () => {
   const [infoMessage, setInfoMessage] = useState("");
   const [success, setSuccess] = useState(false);
   const closeInfoMessage = () => setInfoMessage("");
+
+  // handle close overlay(modal)
+  const overlayRef = useRef(null);
+  const { closeOverlayOnClick, closeOverlayOnEscape } = useCloseOverlay();
+  useEffect(() => {
+    overlayRef.current && overlayRef.current.focus();
+  }, [overlay]);
 
   // fetch list of users from server
   const {
@@ -82,24 +90,6 @@ const AdminPage = () => {
     );
   });
 
-  const handleOverlayClose = (e) => {
-    if (e.target === e.currentTarget) {
-      setOverlay(false);
-    }
-
-    if (e.key === "Escape") {
-      setOverlay(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("keydown", handleOverlayClose);
-
-    return () => {
-      document.removeEventListener("keydown", handleOverlayClose);
-    };
-  }, []);
-
   return (
     <>
       <Header text="admin panel" backButton={false} />
@@ -125,7 +115,13 @@ const AdminPage = () => {
 
           {errMessageUserDetail && <p>{errMessageUserDetail}</p>}
           {overlay === true && !errMessageUserDetail && (
-            <div className="overlay" onClick={(e) => handleOverlayClose(e)}>
+            <div
+              ref={overlayRef}
+              className="overlay"
+              tabIndex={-1}
+              onKeyDown={(e) => setOverlay(closeOverlayOnEscape(e))}
+              onClick={(e) => setOverlay(closeOverlayOnClick(e))}
+            >
               <div className="user-detail">
                 <h3>detail of user: {user.nickName}</h3>
 
