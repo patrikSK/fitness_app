@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import Header from "../components/Header";
 import useFetchData from "../hooks/useFetchData";
 import useCloseOverlay from "../hooks/useCloseOverlay";
+import InfoMessage from "../components/InfoMessage";
 import UniversalBlock from "../components/UniversalBlock";
 import useAuth from "../hooks/useAuth";
 import api from "../api/api";
@@ -18,12 +19,15 @@ const ProgramsPage = () => {
 
   const { auth } = useAuth();
 
+  // handle close overlay(modal)
+  // catch overlay element
   const overlayRef = useRef(null);
+  // functions for close overlay
   const { closeOverlayOnClick, closeOverlayOnEscape } = useCloseOverlay();
+  // when overlay is opened, focus overlay element.
+  // this is important for closing overlay with ESC key
   useEffect(() => {
-    if (overlayRef.current) {
-      overlayRef.current.focus();
-    }
+    overlayRef.current && overlayRef.current.focus();
   }, [overlay]);
 
   // fetch data on first page loading
@@ -32,12 +36,7 @@ const ProgramsPage = () => {
     setPrograms(data);
   }, [data]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setInfoMessage("");
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, [infoMessage]);
+  const closeInfoMessage = () => setInfoMessage("");
 
   // add program to database
   const createProgram = async (e) => {
@@ -150,18 +149,12 @@ const ProgramsPage = () => {
             </div>
           )}
         </div>
-
-        {infoMessage !== "" && (
-          <p
-            className="info-message"
-            style={{
-              background: success ? "#59f750" : "#c4090a",
-            }}
-          >
-            {infoMessage}
-          </p>
-        )}
       </main>
+      <InfoMessage
+        message={infoMessage}
+        success={success}
+        closeInfoMessage={closeInfoMessage}
+      />
     </>
   );
 };
