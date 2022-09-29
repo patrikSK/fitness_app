@@ -12,7 +12,7 @@ import { dayAndMonth } from "../helpers/dateHandlers";
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip);
 
 //return X axis data based on type
-export const getXaxisData = (records = [], type = "") => {
+const getXaxisData = (records = [], type = "") => {
   if (type === "weight") {
     return records.map((record) => record.weight);
   } else if (type === "reps") {
