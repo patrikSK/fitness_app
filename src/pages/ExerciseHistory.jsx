@@ -13,6 +13,7 @@ const ExerciseHistory = () => {
   const { exerciseName } = location.state;
 
   const [records, setRecords] = useState([]);
+  const [currentChart, setCurrentChart] = useState("weight");
 
   // fetch exercises in records
   const { data, isLoading, errMessage } = useFetchData(`/history/exercise/${exerciseId}`);
@@ -36,7 +37,12 @@ const ExerciseHistory = () => {
           {isLoading && <p>Loading...</p>}
           {errMessage && <p>{errMessage}</p>}
           {!isLoading && !errMessage && <ul className="records-list">{recordsList}</ul>}
-          <HistoryChart records={records} type="weight" />
+          <div>
+            <button onClick={() => setCurrentChart("weight")}>weight</button>
+            <button onClick={() => setCurrentChart("reps")}>reps</button>
+            <button onClick={() => setCurrentChart("performance")}>performance</button>
+          </div>
+          <HistoryChart records={records} type={currentChart} />
         </div>
       </main>
     </>

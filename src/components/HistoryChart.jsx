@@ -11,6 +11,7 @@ import { dayAndMonth } from "../helpers/dateHandlers";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip);
 
+//return X axis data based on type
 export const getXaxisData = (records = [], type = "") => {
   if (type === "weight") {
     return records.map((record) => record.weight);
@@ -34,7 +35,7 @@ export default function HistoryChart({ records, type }) {
       y: {
         beginAtZero: true,
         // if weight is on Y axis, then max range * 2
-        max: Math.max(...axisXdata) * (type === "weight" ? 2 : 1),
+        max: Math.max(...axisXdata) * (type === "weight" ? 2 : 1.1),
       },
     },
   };
