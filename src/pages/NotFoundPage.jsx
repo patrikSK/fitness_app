@@ -9,7 +9,7 @@ const NotFoundPage = () => {
       <main>
         <div className="button-wrapper">
           <button>
-            <Link to="/">back to home</Link>
+            <Link to="/programs">back to home</Link>
           </button>
         </div>
       </main>

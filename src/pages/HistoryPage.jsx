@@ -8,37 +8,23 @@ import "../css/history.css";
 const HistoryPage = () => {
   const [dates, setDates] = useState([]);
 
-  // fetch user
+  // fetch dates
   const { data, isLoading, errMessage } = useFetchData("/history/dates");
   useEffect(() => {
     data.dates && setDates(data.dates);
   }, [data]);
 
-  /**
-   * @param {string} - date, when exercise was performed
-   * this fn format date into new desired form
-   * @returns {string} - date in human readable format: '29 08 2022'
-   */
-  /*
-  const formatDate = (date = "") => {
-    const d = date.split("-");
-    const formatedDate = `${d[2]} ${d[1]} ${d[0]}`;
-    return formatedDate;
-  };
-*/
-
   const datesList = dates.map(({ date }) => (
     <li key={date} className="exercise-element">
-      <Link to={date} state={{ date: date }}>
+      <Link to={date}>
         <p>{date}</p>
       </Link>
     </li>
   ));
 
-  console.log(dates);
   return (
     <>
-      <Header text="completed exercises" backButton={false} />
+      <Header text="History" backButton={false} />
       <main className="history-page">
         <div className="container">
           {isLoading && <p>Loading...</p>}
