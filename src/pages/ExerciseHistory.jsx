@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import HistoryChart from "../components/HistoryChart";
 import useFetchData from "../hooks/useFetchData";
 import "../css/history.css";
+import "../css/exerciseHistory.css";
 
 const ExerciseHistory = () => {
   const { exerciseId } = useParams();
@@ -37,10 +38,25 @@ const ExerciseHistory = () => {
           {isLoading && <p>Loading...</p>}
           {errMessage && <p>{errMessage}</p>}
           {!isLoading && !errMessage && <ul className="records-list">{recordsList}</ul>}
-          <div>
-            <button onClick={() => setCurrentChart("weight")}>weight</button>
-            <button onClick={() => setCurrentChart("reps")}>reps</button>
-            <button onClick={() => setCurrentChart("performance")}>performance</button>
+          <div className="switch-chart-wrapper">
+            <button
+              onClick={() => setCurrentChart("weight")}
+              className={currentChart === "weight" && "chart-active"}
+            >
+              weight
+            </button>
+            <button
+              onClick={() => setCurrentChart("reps")}
+              className={currentChart === "reps" && "chart-active"}
+            >
+              reps
+            </button>
+            <button
+              onClick={() => setCurrentChart("performance")}
+              className={currentChart === "performance" && "chart-active"}
+            >
+              performance
+            </button>
           </div>
           <HistoryChart records={records} type={currentChart} />
         </div>
