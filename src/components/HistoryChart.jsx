@@ -35,7 +35,7 @@ export default function HistoryChart({ records, type }) {
       y: {
         beginAtZero: true,
         // if weight is on Y axis, then max range * 2
-        max: Math.max(...axisXdata) * (type === "weight" ? 2 : 1.1),
+        max: Math.floor(Math.max(...axisXdata) * (type === "weight" ? 2 : 1.1)),
       },
     },
   };
