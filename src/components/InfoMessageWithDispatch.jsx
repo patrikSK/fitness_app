@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import "../css/infoMessage.css";
 
-const InfoMessage = ({ message, success, closeInfoMessage }) => {
+const InfoMessageWithDispatch = ({ message, success, dispatch }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
-      closeInfoMessage();
+      dispatch({ type: "closeInfoMessage" });
     }, 2000);
     return () => clearTimeout(timer);
-  }, [message, closeInfoMessage]);
+  }, [message, dispatch]);
 
   return (
     <>
@@ -25,4 +25,4 @@ const InfoMessage = ({ message, success, closeInfoMessage }) => {
   );
 };
 
-export default InfoMessage;
+export default InfoMessageWithDispatch;

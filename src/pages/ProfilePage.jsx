@@ -2,13 +2,24 @@ import { useEffect, useReducer } from "react";
 
 // components
 import Header from "../components/Header";
-import InfoMessage from "../components/InfoMessage";
+import InfoMessageWithDispatch from "../components/InfoMessageWithDispatch";
 // hooks
 import useFetchData from "../hooks/useFetchData";
 // css
 import "../css/profile.css";
 
 import api from "../api/api";
+
+const initialState = {
+  user: {
+    name: "",
+    surname: "",
+    nickName: "",
+    age: 0,
+  },
+  infoMessage: "",
+  success: null,
+};
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -30,13 +41,13 @@ const reducer = (state, action) => {
           [action.field]: action.value,
         },
       };
-    case "success":
+    case "successInfoMessage":
       return {
         ...state,
         infoMessage: "your info was successfully updated",
         success: true,
       };
-    case "error":
+    case "errorInfoMessage":
       return {
         ...state,
         infoMessage: "Error: your info was not updated",
@@ -51,17 +62,6 @@ const reducer = (state, action) => {
     default:
       throw new Error();
   }
-};
-
-const initialState = {
-  user: {
-    name: "",
-    surname: "",
-    nickName: "",
-    age: 0,
-  },
-  infoMessage: "",
-  success: null,
 };
 
 const ProfilePage = () => {
@@ -90,13 +90,12 @@ const ProfilePage = () => {
 
     try {
       await api.put(url, data, headers);
-      dispatch({ type: "success" });
+      dispatch({ type: "successInfoMessage" });
     } catch (err) {
-      dispatch({ type: "error" });
+      dispatch({ type: "errorInfoMessage" });
       console.log(err);
     }
   };
-
   return (
     <>
       <Header text="your profile" backButton={false} />
@@ -196,7 +195,7 @@ const ProfilePage = () => {
           )}
         </div>
 
-        <InfoMessage
+        <InfoMessageWithDispatch
           message={state.infoMessage}
           success={state.success}
           dispatch={dispatch}
