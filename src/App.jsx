@@ -43,7 +43,7 @@ function App() {
     const role = localStorage.getItem("role");
 
     if (role) {
-      setRole({ role });
+      setRole(role);
     }
   }, [setRole]);
 
