@@ -28,8 +28,6 @@ const ExercisePage = () => {
     difficulty: "EASY",
     muscle: "",
     instructions: "",
-    message: "",
-    success: undefined,
   });
 
   const [weight, setWeight] = useState("");
