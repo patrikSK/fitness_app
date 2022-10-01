@@ -1,13 +1,16 @@
 import { useLocation, useParams } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 
+// components
 import Header from "../components/Header";
 import InfoMessage from "../components/InfoMessage";
-
+// hooks
 import useCloseOverlay from "../hooks/useCloseOverlay";
 import useRole from "../hooks/useRole";
-import api from "../api/api";
+// css
 import "../css/exercisePage.css";
+
+import api from "../api/api";
 
 const ExercisePage = () => {
   const location = useLocation();
