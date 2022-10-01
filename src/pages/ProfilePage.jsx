@@ -1,32 +1,76 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer } from "react";
 
+// components
 import Header from "../components/Header";
 import InfoMessage from "../components/InfoMessage";
+// hooks
 import useFetchData from "../hooks/useFetchData";
-import api from "../api/api";
+// css
 import "../css/profile.css";
 
-const ProfilePage = () => {
-  const [user, setUser] = useState({
+import api from "../api/api";
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "setUser":
+      return {
+        ...state,
+        user: {
+          name: action.value.name,
+          surname: action.value.surname,
+          nickName: action.value.nickName,
+          age: action.value.age,
+        },
+      };
+    case "field":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          [action.field]: action.value,
+        },
+      };
+    case "success":
+      return {
+        ...state,
+        infoMessage: "your info was successfully updated",
+        success: true,
+      };
+    case "error":
+      return {
+        ...state,
+        infoMessage: "Error: your info was not updated",
+        success: false,
+      };
+    case "closeInfoMessage":
+      return {
+        ...state,
+        success: null,
+        infoMessage: "",
+      };
+    default:
+      throw new Error();
+  }
+};
+
+const initialState = {
+  user: {
     name: "",
     surname: "",
     nickName: "",
     age: 0,
-  });
+  },
+  infoMessage: "",
+  success: null,
+};
 
-  const [infoMessage, setInfoMessage] = useState("");
-  const [success, setSuccess] = useState(false);
-  const closeInfoMessage = () => setInfoMessage("");
+const ProfilePage = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   // fetch user
   const { data, isLoading, errMessage } = useFetchData("/users/user");
   useEffect(() => {
-    setUser({
-      name: data.name,
-      surname: data.surname,
-      nickName: data.nickName,
-      age: data.age,
-    });
+    dispatch({ type: "setUser", value: data });
   }, [data]);
 
   const updateUserData = async (e) => {
@@ -34,10 +78,10 @@ const ProfilePage = () => {
 
     const url = "/users/user";
     const data = {
-      name: user.name,
-      surname: user.surname,
-      nickName: user.nickName,
-      age: user.age,
+      name: state.user.name,
+      surname: state.user.surname,
+      nickName: state.user.nickName,
+      age: state.user.age,
     };
     const headers = {
       Accept: "application/json",
@@ -46,13 +90,9 @@ const ProfilePage = () => {
 
     try {
       await api.put(url, data, headers);
-
-      // set message
-      setInfoMessage("your info was successfully updated");
-      setSuccess(true);
+      dispatch({ type: "success" });
     } catch (err) {
-      setInfoMessage("Error: your info was not updated");
-      setSuccess(false);
+      dispatch({ type: "error" });
       console.log(err);
     }
   };
@@ -77,13 +117,14 @@ const ProfilePage = () => {
                       <input
                         type="text"
                         name="name"
-                        value={user.name}
+                        value={state.user.name}
                         required
                         placeholder="enter name"
                         onChange={(e) =>
-                          setUser({
-                            ...user,
-                            name: e.target.value,
+                          dispatch({
+                            type: "field",
+                            field: "name",
+                            value: e.target.value,
                           })
                         }
                       />
@@ -95,13 +136,14 @@ const ProfilePage = () => {
                       <input
                         type="text"
                         name="surname"
-                        value={user.surname}
+                        value={state.user.surname}
                         required
                         placeholder="enter surname"
                         onChange={(e) =>
-                          setUser({
-                            ...user,
-                            surname: e.target.value,
+                          dispatch({
+                            type: "field",
+                            field: "surname",
+                            value: e.target.value,
                           })
                         }
                       />
@@ -113,13 +155,14 @@ const ProfilePage = () => {
                       <input
                         type="text"
                         name="nickName"
-                        value={user.nickName}
+                        value={state.user.nickName}
                         required
                         placeholder="enter nickname"
                         onChange={(e) =>
-                          setUser({
-                            ...user,
-                            nickName: e.target.value,
+                          dispatch({
+                            type: "field",
+                            field: "nickName",
+                            value: e.target.value,
                           })
                         }
                       />
@@ -131,13 +174,14 @@ const ProfilePage = () => {
                       <input
                         type="text"
                         name="age"
-                        value={user.age}
+                        value={state.user.age}
                         required
                         placeholder="enter age"
                         onChange={(e) =>
-                          setUser({
-                            ...user,
-                            age: e.target.value,
+                          dispatch({
+                            type: "field",
+                            field: "age",
+                            value: e.target.value,
                           })
                         }
                       />
@@ -153,9 +197,9 @@ const ProfilePage = () => {
         </div>
 
         <InfoMessage
-          message={infoMessage}
-          success={success}
-          closeInfoMessage={closeInfoMessage}
+          message={state.infoMessage}
+          success={state.success}
+          dispatch={dispatch}
         />
       </main>
     </>
