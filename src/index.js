@@ -6,12 +6,15 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { RoleProvider } from "./context/RoleProvider";
+import { DataProvider } from "./context/DataProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <RoleProvider>
-      <App />
+      <DataProvider>
+        <App />
+      </DataProvider>
     </RoleProvider>
   </React.StrictMode>
 );

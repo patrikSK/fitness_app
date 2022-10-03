@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 
 // hooks
 import useRole from "../hooks/useRole";
+import useData from "../hooks/useData";
 import useFetchData from "../hooks/useFetchData";
 import useCloseOverlay from "../hooks/useCloseOverlay";
 
@@ -24,6 +25,9 @@ const ProgramsPage = () => {
   const closeInfoMessage = () => setInfoMessage("");
 
   const { role } = useRole();
+  const { data: myData } = useData();
+
+  console.log(myData);
 
   // handle close overlay(modal)
   // catch overlay element
