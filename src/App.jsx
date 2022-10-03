@@ -20,6 +20,7 @@ import HistoryPage from "./pages/HistoryPage";
 import HistoryExercisesPage from "./pages/HistoryExercisesPage";
 import ExerciseHistory from "./pages/ExerciseHistory";
 
+//
 //components
 import RequireAuth from "./components/RequireAuth";
 import UnrequireAuth from "./components/UnrequireAuth";
