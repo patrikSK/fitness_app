@@ -1,73 +1,128 @@
-import { useLocation, useParams } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
+import { useReducer, useEffect, useRef } from "react";
 
 // components
 import Header from "../components/Header";
-import InfoMessage from "../components/InfoMessage";
+import InfoMessageWithDispatch from "../components/InfoMessageWithDispatch";
 // hooks
 import useCloseOverlay from "../hooks/useCloseOverlay";
 import useRole from "../hooks/useRole";
+import useExercises from "../hooks/useExercises";
 // css
 import "../css/exercisePage.css";
 
 import api from "../api/api";
 
+const initialState = {
+  exercise: {
+    id: null,
+    name: "",
+    difficulty: "",
+    muscle: "",
+    instructions: "",
+    programID: null,
+  },
+  editExercise: {
+    name: "",
+    difficulty: "EASY",
+    muscle: "",
+    instructions: "",
+  },
+  weight: "",
+  reps: "",
+  infoMessage: "",
+  success: null,
+  overlay: false,
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "setExercise":
+      return {
+        exercise: {
+          id: action.value.id,
+          name: action.value.name,
+          difficulty: action.value.difficulty,
+          muscle: action.value.muscle,
+          instructions: action.value.instructions,
+          programID: action.value.programID,
+        },
+      };
+    case "historyFields":
+      return {
+        ...state,
+        [action.field]: action.value,
+      };
+    case "editExerciseFields":
+      return {
+        ...state,
+        editExercise: {
+          ...state.editExercise,
+          [action.field]: action.value,
+        },
+      };
+    case "successInfoMessage":
+      return {
+        ...state,
+        infoMessage: action.value,
+        success: true,
+      };
+    case "errorInfoMessage":
+      return {
+        ...state,
+        infoMessage: action.value,
+        success: false,
+      };
+    case "closeInfoMessage":
+      return {
+        ...state,
+        success: null,
+        infoMessage: "",
+      };
+    case "setOverlay":
+      return {
+        ...state,
+        overlay: action.value,
+      };
+    case "clearInputs":
+      return {
+        ...state,
+        weight: "",
+        reps: "",
+        editExercise: {
+          name: "",
+          difficulty: "EASY",
+          muscle: "",
+          instructions: "",
+        },
+      };
+    default:
+      throw new Error("you provide wrong action");
+  }
+};
+
 const ExercisePage = () => {
-  const location = useLocation();
-  const { exrcs } = location.state;
-  const { programId } = useParams();
+  const [state, dispatch] = useReducer(reducer, initialState);
+
   const { role } = useRole();
-
-  const [exercise, setExercise] = useState({
-    id: undefined,
-    name: "",
-    difficulty: "EASY",
-    muscle: "",
-    instructions: "",
-  });
-
-  const [editExercise, setEditExercise] = useState({
-    name: "",
-    difficulty: "EASY",
-    muscle: "",
-    instructions: "",
-  });
-
-  const [weight, setWeight] = useState("");
-  const [reps, setReps] = useState("");
-
-  const [infoMessage, setInfoMessage] = useState("");
-  const [success, setSuccess] = useState(undefined);
-  const [overlay, setOverlay] = useState(false);
-  const closeInfoMessage = () => setInfoMessage("");
-
-  // handle close overlay(modal)
-  const overlayRef = useRef(null);
-  const { closeOverlayOnClick, closeOverlayOnEscape } = useCloseOverlay();
-  useEffect(() => {
-    overlayRef.current && overlayRef.current.focus();
-  }, [overlay]);
+  const { exerciseId } = useParams();
+  const { exercises, dispatchExercises } = useExercises();
 
   useEffect(() => {
-    setExercise({
-      id: exrcs.id,
-      name: exrcs.name,
-      difficulty: exrcs.difficulty,
-      muscle: exrcs.muscle,
-      instructions: exrcs.instructions,
-    });
-  }, [exrcs, setExercise]);
+    console.log("set exercise");
+    const singleExercise = exercises.filter((exercise) => exercise.id === exerciseId);
+    dispatch({ type: "setExercise", value: singleExercise[0] });
+  }, [exercises, exerciseId]);
 
-  //add exercise to history
   const addExerciseToHistry = async (e) => {
     e.preventDefault();
 
     const url = "/history";
     const data = {
-      weight: weight,
-      reps: reps,
-      exerciseName: exercise.name,
-      exerciseId: exercise.id,
+      weight: state.weight,
+      reps: state.reps,
+      exerciseName: state.exercise.name,
+      exerciseId: state.exercise.id,
     };
     const headers = {
       Accept: "application/json",
@@ -76,30 +131,27 @@ const ExercisePage = () => {
 
     try {
       await api.post(url, data, headers);
-      setInfoMessage("history was succesfuly updated");
-      setSuccess(true);
+      dispatch({ type: "successInfoMessage", value: "history was succesfuly updated" });
     } catch (err) {
-      setInfoMessage("Error: history was not updated");
-      setSuccess(true);
+      dispatch({ type: "errorInfoMessage", value: "Error: history was not updated" });
       console.log(err);
     }
 
-    // clear inputs
-    setWeight(0);
-    setReps(0);
+    dispatch({ type: "clearInputs" });
   };
 
-  // update exercise
+  console.log(state.reps);
+
   const updateExercise = async (e) => {
     e.preventDefault();
 
-    const url = `/exercises/${exercise.id}`;
+    const url = `/exercises/${state.exercise.id}`;
     const data = {
-      difficulty: editExercise.difficulty,
-      name: editExercise.name,
-      muscle: editExercise.muscle,
-      instructions: editExercise.instructions,
-      programID: programId,
+      difficulty: state.editExercise.difficulty,
+      name: state.editExercise.name,
+      muscle: state.editExercise.muscle,
+      instructions: state.editExercise.instructions,
+      programID: state.exercise.programID,
     };
     const headers = {
       Accept: "application/json",
@@ -109,47 +161,48 @@ const ExercisePage = () => {
     try {
       await api.put(url, data, headers);
 
-      setExercise({
-        name: editExercise.name,
-        difficulty: editExercise.difficulty,
-        muscle: editExercise.muscle,
-        instructions: editExercise.instructions,
+      dispatchExercises({
+        type: "updateExercise",
+        id: exerciseId,
+        updatedExercise: data,
       });
 
-      setInfoMessage("exercise was succesfuly updated");
-      setSuccess(true);
+      dispatch({ type: "successInfoMessage", value: "exercise was succesfuly updated" });
     } catch (err) {
-      setInfoMessage("exercise was not succesfuly updated");
-      setSuccess(false);
+      dispatch({
+        type: "errorInfoMessage",
+        value: "exercise was not succesfuly updated",
+      });
       console.log(err);
     }
 
-    // clear inputs
-    setEditExercise({
-      name: "",
-      difficulty: "EASY",
-      muscle: "",
-      instructions: "",
-    });
+    dispatch({ type: "clearInputs" });
   };
+
+  // handle close overlay(modal)
+  const overlayRef = useRef(null);
+  const { closeOverlayOnClick, closeOverlayOnEscape } = useCloseOverlay();
+  useEffect(() => {
+    overlayRef.current && overlayRef.current.focus();
+  }, [state.overlay]);
 
   return (
     <>
-      <Header text={exercise.name} backButton={true} />
+      <Header text={state.exercise.name} backButton={true} />
       <main>
         <div className="container">
           <div className="exercise-details-wrapper">
             <div className="difficulty-block">
               <h3>Difficulty:</h3>
-              <p>{exercise.difficulty}</p>
+              <p>{state.exercise.difficulty}</p>
             </div>
             <div className="muscle-block">
               <h3>Muscle:</h3>
-              <p>{exercise.muscle}</p>
+              <p>{state.exercise.muscle}</p>
             </div>
             <div className="instructions-block">
               <h3>Instuctions:</h3>
-              <p>{exercise.instructions}</p>
+              <p>{state.exercise.instructions}</p>
             </div>
           </div>
 
@@ -159,18 +212,30 @@ const ExercisePage = () => {
               <input
                 type="number"
                 name="weight"
-                value={weight}
+                value={state.weight}
                 placeholder="weight"
                 required
-                onChange={(e) => setWeight(e.target.value)}
+                onChange={(e) =>
+                  dispatch({
+                    type: "historyFields",
+                    field: "weight",
+                    value: e.target.value,
+                  })
+                }
               />
               <input
                 type="number"
                 name="reps"
-                value={reps}
+                value={state.reps}
                 placeholder="reps"
                 required
-                onChange={(e) => setReps(e.target.value)}
+                onChange={(e) =>
+                  dispatch({
+                    type: "historyFields",
+                    field: "reps",
+                    value: e.target.value,
+                  })
+                }
               />
               <div className="button-wrapper">
                 <button type="submit">add to history</button>
@@ -180,17 +245,23 @@ const ExercisePage = () => {
 
           {role === "ADMIN" && (
             <div className="button-wrapper">
-              <button onClick={() => setOverlay(true)}>update exercise</button>
+              <button onClick={() => dispatch({ type: "setOverlay", value: true })}>
+                update exercise
+              </button>
             </div>
           )}
 
-          {role === "ADMIN" && overlay === true && (
+          {role === "ADMIN" && state.overlay === true && (
             <div
               ref={overlayRef}
               className="overlay"
               tabIndex={-1}
-              onKeyDown={(e) => setOverlay(closeOverlayOnEscape(e))}
-              onClick={(e) => setOverlay(closeOverlayOnClick(e))}
+              onKeyDown={(e) =>
+                dispatch({ type: "setOverlay", value: closeOverlayOnEscape(e) })
+              }
+              onClick={(e) =>
+                dispatch({ type: "setOverlay", value: closeOverlayOnClick(e) })
+              }
             >
               <div className="form">
                 <h3>update Exercise</h3>
@@ -200,12 +271,13 @@ const ExercisePage = () => {
                     id="name"
                     name="name"
                     required
-                    value={editExercise.name}
+                    value={state.editExercise.name}
                     placeholder="enter name of the exercise"
                     onChange={(e) => {
-                      setEditExercise({
-                        ...editExercise,
-                        name: e.target.value,
+                      dispatch({
+                        type: "editExerciseFields",
+                        field: "name",
+                        value: e.target.value,
                       });
                     }}
                   />
@@ -215,12 +287,13 @@ const ExercisePage = () => {
                     id="muscle"
                     name="muscle"
                     required
-                    value={editExercise.muscle}
-                    placeholder="enter name of the exercise"
+                    value={state.editExercise.muscle}
+                    placeholder="enter muscle"
                     onChange={(e) => {
-                      setEditExercise({
-                        ...editExercise,
-                        muscle: e.target.value,
+                      dispatch({
+                        type: "editExerciseFields",
+                        field: "muscle",
+                        value: e.target.value,
                       });
                     }}
                   />
@@ -229,12 +302,13 @@ const ExercisePage = () => {
                     id="instructions"
                     name="instructions"
                     required
-                    value={editExercise.instructions}
-                    placeholder="enter name of the exercise"
+                    value={state.editExercise.instructions}
+                    placeholder="enter instructions "
                     onChange={(e) => {
-                      setEditExercise({
-                        ...editExercise,
-                        instructions: e.target.value,
+                      dispatch({
+                        type: "editExerciseFields",
+                        field: "instructions",
+                        value: e.target.value,
                       });
                     }}
                   ></textarea>
@@ -245,9 +319,10 @@ const ExercisePage = () => {
                       name="difficulty"
                       id="difficulty"
                       onChange={(e) =>
-                        setEditExercise({
-                          ...editExercise,
-                          difficulty: e.target.value,
+                        dispatch({
+                          type: "editExerciseFields",
+                          field: "difficulty",
+                          value: e.target.value,
                         })
                       }
                     >
@@ -265,10 +340,10 @@ const ExercisePage = () => {
           )}
         </div>
 
-        <InfoMessage
-          message={infoMessage}
-          success={success}
-          closeInfoMessage={closeInfoMessage}
+        <InfoMessageWithDispatch
+          message={state.infoMessage}
+          success={state.success}
+          dispatch={dispatch}
         />
       </main>
     </>

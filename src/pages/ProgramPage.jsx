@@ -1,61 +1,48 @@
 import { useParams, useLocation } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 
 // components
 import Header from "../components/Header";
 import InfoMessage from "../components/InfoMessage";
 import UniversalBlock from "../components/UniversalBlock";
-
 // hooks
 import useRole from "../hooks/useRole";
-import useFetchData from "../hooks/useFetchData";
+import useExercises from "../hooks/useExercises";
 import useCloseOverlay from "../hooks/useCloseOverlay";
 
 import api from "../api/api";
 
 const ProgramPage = () => {
+  const [newExercise, setNewExercise] = useState({
+    name: "",
+    difficulty: "EASY",
+    muscle: "",
+    instructions: "",
+  });
+
+  const [infoMessage, setInfoMessage] = useState("");
+  const [success, setSuccess] = useState(null);
+  const [overlay, setOverlay] = useState(false);
+  const closeInfoMessage = () => setInfoMessage("");
+
   const { role } = useRole();
   const location = useLocation();
   const { program } = location.state;
   const { programId } = useParams();
 
-  const [exercises, setExercises] = useState([]);
-
-  const [exerciseName, setExerciseName] = useState("");
-  const [difficulty, setDifficulty] = useState("EASY");
-  const [muscle, setMuscle] = useState("");
-  const [instructions, setInstructions] = useState("");
-
-  const [infoMessage, setInfoMessage] = useState("");
-  const [success, setSuccess] = useState(undefined);
-  const [overlay, setOverlay] = useState(false);
-  const closeInfoMessage = () => setInfoMessage("");
-
-  // handle close overlay(modal)
-  const overlayRef = useRef(null);
-  const { closeOverlayOnClick, closeOverlayOnEscape } = useCloseOverlay();
-  useEffect(() => {
-    overlayRef.current && overlayRef.current.focus();
-  }, [overlay]);
-
-  // fetch data on first page loading
-  const { data, isLoading, errMessage } = useFetchData(
-    `/exercises?programID=${programId}`
+  const { getExercisesByProgramId, isLoading, errMessage, dispatchExercises } =
+    useExercises();
+  const exercises = useMemo(
+    () => getExercisesByProgramId(programId),
+    [programId, getExercisesByProgramId]
   );
-  useEffect(() => {
-    setExercises(data);
-  }, [data, programId]);
 
-  // add Exercise to database
-  const createExercise = async (e) => {
+  const createNewExercise = async (e) => {
     e.preventDefault();
 
     const url = "/exercises";
     const data = {
-      difficulty: difficulty,
-      name: exerciseName,
-      muscle: muscle,
-      instructions: instructions,
+      ...newExercise,
       programID: programId,
     };
     const headers = {
@@ -67,16 +54,18 @@ const ProgramPage = () => {
       const res = await api.post(url, data, headers);
 
       // add exercise to UI
-      setExercises((prev) => [...prev, res.data.exercise]);
+      dispatchExercises({ type: "addExercise", value: res.data.exercise });
 
-      // set message
       setInfoMessage("exercise was succesfully created");
       setSuccess(true);
 
       // clear inputs
-      setExerciseName("");
-      setMuscle("");
-      setInstructions("");
+      setNewExercise({
+        name: "",
+        difficulty: "EASY",
+        muscle: "",
+        instructions: "",
+      });
     } catch (err) {
       setInfoMessage("Error: exercise was not created");
       setSuccess(false);
@@ -84,7 +73,6 @@ const ProgramPage = () => {
     }
   };
 
-  // delete Exercise from database
   const deleteExercise = async (e, id) => {
     e.preventDefault();
 
@@ -92,9 +80,8 @@ const ProgramPage = () => {
       await api.delete(`/exercises/${id}/`);
 
       // remove exercise from UI
-      setExercises(exercises.filter((exercise) => exercise.id !== id));
+      dispatchExercises({ type: "removeExercise", exerciseId: id });
 
-      // success message
       setInfoMessage("exercise was succesfuly deleted");
       setSuccess(true);
     } catch (err) {
@@ -104,13 +91,20 @@ const ProgramPage = () => {
     }
   };
 
+  // handle close overlay(modal)
+  const overlayRef = useRef(null);
+  const { closeOverlayOnClick, closeOverlayOnEscape } = useCloseOverlay();
+  useEffect(() => {
+    overlayRef.current && overlayRef.current.focus();
+  }, [overlay]);
+
   const ExerciseList = exercises.map((exercise) => {
     return (
       <UniversalBlock
         key={exercise.id.toString()}
         item={exercise}
         deleteItem={deleteExercise}
-        url="/exercise/"
+        url={`/exercise/`}
         itemName="exrcs"
       />
     );
@@ -145,16 +139,16 @@ const ProgramPage = () => {
             >
               <div className="form new-exercise">
                 <h3>create a new Exercise</h3>
-                <form onSubmit={createExercise}>
+                <form onSubmit={createNewExercise}>
                   <input
                     type="text"
                     id="name"
                     name="name"
                     required
-                    value={exerciseName}
+                    value={newExercise.name}
                     placeholder="enter name of the exercise"
                     onChange={(e) => {
-                      setExerciseName(e.target.value);
+                      setNewExercise({ ...newExercise, name: e.target.value });
                     }}
                   />
                   <input
@@ -162,10 +156,10 @@ const ProgramPage = () => {
                     id="muscle"
                     name="muscle"
                     required
-                    value={muscle}
+                    value={newExercise.muscle}
                     placeholder="enter muscle"
                     onChange={(e) => {
-                      setMuscle(e.target.value);
+                      setNewExercise({ ...newExercise, muscle: e.target.value });
                     }}
                   />
                   <textarea
@@ -173,10 +167,10 @@ const ProgramPage = () => {
                     id="instructions"
                     name="instructions"
                     required
-                    value={instructions}
+                    value={newExercise.instructions}
                     placeholder="enter instructions"
                     onChange={(e) => {
-                      setInstructions(e.target.value);
+                      setNewExercise({ ...newExercise, instructions: e.target.value });
                     }}
                   />
                   <label htmlFor="difficulty" className="select-difficulty">
@@ -184,7 +178,9 @@ const ProgramPage = () => {
                     <select
                       name="difficulty"
                       id="difficulty"
-                      onChange={(e) => setDifficulty(e.target.value)}
+                      onChange={(e) =>
+                        setNewExercise({ ...newExercise, difficulty: e.target.value })
+                      }
                     >
                       <option value="EASY">Easy</option>
                       <option value="MEDIUM">Medium</option>

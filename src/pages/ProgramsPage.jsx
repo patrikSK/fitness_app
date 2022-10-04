@@ -1,21 +1,19 @@
 import { useState, useEffect, useRef } from "react";
 
-// hooks
-import useRole from "../hooks/useRole";
-import useData from "../hooks/useData";
-import useFetchData from "../hooks/useFetchData";
-import useCloseOverlay from "../hooks/useCloseOverlay";
-
 // components
 import Header from "../components/Header";
 import InfoMessage from "../components/InfoMessage";
 import UniversalBlock from "../components/UniversalBlock";
-
-import api from "../api/api";
+// hooks
+import useRole from "../hooks/useRole";
+import usePrograms from "../hooks/usePrograms";
+import useCloseOverlay from "../hooks/useCloseOverlay";
+// css
 import "../css/form.css";
 
+import api from "../api/api";
+
 const ProgramsPage = () => {
-  const [programs, setPrograms] = useState([]);
   const [newProgramName, setNewProgramName] = useState("");
 
   const [overlay, setOverlay] = useState(false);
@@ -25,9 +23,7 @@ const ProgramsPage = () => {
   const closeInfoMessage = () => setInfoMessage("");
 
   const { role } = useRole();
-  const { data: myData } = useData();
-
-  console.log(myData);
+  const { programs, isLoading, errMessage, setPrograms } = usePrograms();
 
   // handle close overlay(modal)
   // catch overlay element
@@ -40,14 +36,7 @@ const ProgramsPage = () => {
     overlayRef.current && overlayRef.current.focus();
   }, [overlay]);
 
-  // fetch data on first page loading
-  const { data, isLoading, errMessage } = useFetchData("/programs");
-  useEffect(() => {
-    setPrograms(data);
-  }, [data]);
-
-  // add program to database
-  const createProgram = async (e) => {
+  const createNewProgram = async (e) => {
     e.preventDefault();
 
     const headers = {
@@ -77,7 +66,6 @@ const ProgramsPage = () => {
     }
   };
 
-  // delete program from database
   const deleteProgram = async (e, id) => {
     e.preventDefault();
 
@@ -87,7 +75,6 @@ const ProgramsPage = () => {
       // remove program from UI
       setPrograms(programs.filter((program) => program.id !== id));
 
-      // success message
       setInfoMessage("program was succesfuly deleted");
       setSuccess(true);
     } catch (err) {
@@ -137,7 +124,7 @@ const ProgramsPage = () => {
             >
               <div className="form">
                 <h3>create a new program</h3>
-                <form onSubmit={createProgram}>
+                <form onSubmit={createNewProgram}>
                   <input
                     type="text"
                     id="name"

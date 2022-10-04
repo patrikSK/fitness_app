@@ -27,6 +27,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         user: {
+          ...state.user,
           name: action.value.name,
           surname: action.value.surname,
           nickName: action.value.nickName,
@@ -60,7 +61,7 @@ const reducer = (state, action) => {
         infoMessage: "",
       };
     default:
-      throw new Error();
+      return state;
   }
 };
 
@@ -70,7 +71,9 @@ const ProfilePage = () => {
   // fetch user
   const { data, isLoading, errMessage } = useFetchData("/users/user");
   useEffect(() => {
-    dispatch({ type: "setUser", value: data });
+    if (data) {
+      dispatch({ type: "setUser", value: data });
+    }
   }, [data]);
 
   const updateUserData = async (e) => {
