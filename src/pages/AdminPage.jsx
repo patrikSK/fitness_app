@@ -8,7 +8,7 @@ import api from "../api/api";
 import "../css/admin.css";
 
 const AdminPage = () => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState([]);
   const [date, setDate] = useState("");
   const [errMessageUserDetail, setErrMessageUserDetail] = useState("");
 

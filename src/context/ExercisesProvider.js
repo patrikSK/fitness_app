@@ -5,16 +5,21 @@ const ExercisesContext = createContext({});
 
 const initialState = {
   exercises: [],
+  searchedExercises: [],
+  paginatedExercises: [],
+  searchText: "",
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
     case "setExercises":
       return {
+        ...state,
         exercises: action.value,
       };
     case "addExercise":
       return {
+        ...state,
         exercises: [...state.exercises, action.value],
       };
     case "updateExercise":
@@ -24,13 +29,34 @@ const reducer = (state, action) => {
           : exercise;
       });
       return {
+        ...state,
         exercises: updatedExercises,
       };
     case "removeExercise":
       return {
+        ...state,
         exercises: state.exercises.filter(
           (exercise) => exercise.id !== action.exerciseId
         ),
+      };
+    case "searchExercises":
+      return {
+        ...state,
+        searchedExercises: state.exercises.filter((exercise) =>
+          exercise.name.toLowerCase().includes(state.searchText.toLowerCase())
+        ),
+      };
+    case "setPaginatedExercises":
+      const startIndex = action.value * 9;
+      const endIndex = action.value * 9 + 9;
+      return {
+        ...state,
+        paginatedExercises: state.exercises.slice(startIndex, endIndex),
+      };
+    case "setSearchText":
+      return {
+        ...state,
+        searchText: action.value,
       };
     default:
       throw new Error("you provide wrong action");
@@ -50,35 +76,21 @@ export const ExercisesProvider = ({ children }) => {
     }
   }, [role, data]);
 
-  const getExercisesByProgramId = (id) => {
-    return state.exercises.filter((exercise) => exercise.programID === id);
-  };
-
-  const getExercisesByPage = (page) => {
-    const startIndex = page * 9;
-    const endIndex = page * 9 + 9;
-    return state.exercises.slice(startIndex, endIndex);
-  };
-
-  const getSearchExercises = (searchedText) => {
-    return state.exercises.filter((exercise) =>
-      exercise.name.toLowerCase().includes(searchedText.toLowerCase())
-    );
-  };
-
-  const getNumberOfExercises = () => state.exercises.length;
+  useEffect(() => {
+    dispatchExercises({ type: "searchExercises" });
+  }, [state.searchText]);
 
   return (
     <ExercisesContext.Provider
       value={{
         exercises: state.exercises,
+        searchedExercises: state.searchedExercises,
+        paginatedExercises: state.paginatedExercises,
+        searchText: state.searchText,
+        numOfExercises: state.exercises.length,
         isLoading,
         errMessage,
         dispatchExercises,
-        getExercisesByProgramId,
-        getExercisesByPage,
-        getNumberOfExercises,
-        getSearchExercises,
       }}
     >
       {children}

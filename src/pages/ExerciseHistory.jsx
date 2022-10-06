@@ -19,7 +19,7 @@ const ExerciseHistory = () => {
   // fetch exercises in records
   const { data, isLoading, errMessage } = useFetchData(`/history/exercise/${exerciseId}`);
   useEffect(() => {
-    data.oneExerciseRecords && setRecords(data.oneExerciseRecords);
+    data && setRecords(data.oneExerciseRecords);
   }, [data]);
 
   const recordsList = records.map((record) => (

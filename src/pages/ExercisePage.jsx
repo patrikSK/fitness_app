@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useReducer, useEffect, useRef } from "react";
+import { useReducer, useEffect, useRef, useMemo } from "react";
 
 // components
 import Header from "../components/Header";
@@ -14,14 +14,6 @@ import "../css/exercisePage.css";
 import api from "../api/api";
 
 const initialState = {
-  exercise: {
-    id: null,
-    name: "",
-    difficulty: "",
-    muscle: "",
-    instructions: "",
-    programID: null,
-  },
   editExercise: {
     name: "",
     difficulty: "EASY",
@@ -37,17 +29,6 @@ const initialState = {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case "setExercise":
-      return {
-        exercise: {
-          id: action.value.id,
-          name: action.value.name,
-          difficulty: action.value.difficulty,
-          muscle: action.value.muscle,
-          instructions: action.value.instructions,
-          programID: action.value.programID,
-        },
-      };
     case "historyFields":
       return {
         ...state,
@@ -108,11 +89,10 @@ const ExercisePage = () => {
   const { exerciseId } = useParams();
   const { exercises, dispatchExercises } = useExercises();
 
-  useEffect(() => {
-    console.log("set exercise");
-    const singleExercise = exercises.filter((exercise) => exercise.id === exerciseId);
-    dispatch({ type: "setExercise", value: singleExercise[0] });
-  }, [exercises, exerciseId]);
+  const exercise = useMemo(
+    () => exercises.filter((exercise) => exercise.id === exerciseId)[0],
+    [exercises, exerciseId]
+  );
 
   const addExerciseToHistry = async (e) => {
     e.preventDefault();
@@ -121,8 +101,8 @@ const ExercisePage = () => {
     const data = {
       weight: state.weight,
       reps: state.reps,
-      exerciseName: state.exercise.name,
-      exerciseId: state.exercise.id,
+      exerciseName: exercise.name,
+      exerciseId: exercise.id,
     };
     const headers = {
       Accept: "application/json",
@@ -140,18 +120,16 @@ const ExercisePage = () => {
     dispatch({ type: "clearInputs" });
   };
 
-  console.log(state.reps);
-
   const updateExercise = async (e) => {
     e.preventDefault();
 
-    const url = `/exercises/${state.exercise.id}`;
+    const url = `/exercises/${exercise.id}`;
     const data = {
       difficulty: state.editExercise.difficulty,
       name: state.editExercise.name,
       muscle: state.editExercise.muscle,
       instructions: state.editExercise.instructions,
-      programID: state.exercise.programID,
+      programID: exercise.programID,
     };
     const headers = {
       Accept: "application/json",
@@ -188,21 +166,21 @@ const ExercisePage = () => {
 
   return (
     <>
-      <Header text={state.exercise.name} backButton={true} />
+      <Header text={exercise.name} backButton={true} />
       <main>
         <div className="container">
           <div className="exercise-details-wrapper">
             <div className="difficulty-block">
               <h3>Difficulty:</h3>
-              <p>{state.exercise.difficulty}</p>
+              <p>{exercise.difficulty}</p>
             </div>
             <div className="muscle-block">
               <h3>Muscle:</h3>
-              <p>{state.exercise.muscle}</p>
+              <p>{exercise.muscle}</p>
             </div>
             <div className="instructions-block">
               <h3>Instuctions:</h3>
-              <p>{state.exercise.instructions}</p>
+              <p>{exercise.instructions}</p>
             </div>
           </div>
 

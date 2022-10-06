@@ -13,7 +13,7 @@ const HistoryExercisesPage = () => {
   // fetch exercises in records
   const { data, isLoading, errMessage } = useFetchData(`/history/exercises/${date}`);
   useEffect(() => {
-    data.exercises && setExercises(data.exercises);
+    data && setExercises(data.exercises);
   }, [data]);
 
   const exercisesList = exercises.map((exercise) => (

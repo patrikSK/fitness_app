@@ -11,7 +11,7 @@ const HistoryPage = () => {
   // fetch dates
   const { data, isLoading, errMessage } = useFetchData("/history/dates");
   useEffect(() => {
-    data.dates && setDates(data.dates);
+    data && setDates(data.dates);
   }, [data]);
 
   const datesList = dates.map(({ date }) => (

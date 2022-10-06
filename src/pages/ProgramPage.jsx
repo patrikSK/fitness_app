@@ -11,7 +11,6 @@ import useExercises from "../hooks/useExercises";
 import useCloseOverlay from "../hooks/useCloseOverlay";
 
 import api from "../api/api";
-
 const ProgramPage = () => {
   const [newExercise, setNewExercise] = useState({
     name: "",
@@ -30,11 +29,16 @@ const ProgramPage = () => {
   const { program } = location.state;
   const { programId } = useParams();
 
-  const { getExercisesByProgramId, isLoading, errMessage, dispatchExercises } =
-    useExercises();
+  const {
+    isLoading,
+    errMessage,
+    exercises: exercisesByProgramId,
+    dispatchExercises,
+  } = useExercises();
+
   const exercises = useMemo(
-    () => getExercisesByProgramId(programId),
-    [programId, getExercisesByProgramId]
+    () => exercisesByProgramId.filter((exercise) => exercise.programID === programId),
+    [exercisesByProgramId, programId]
   );
 
   const createNewExercise = async (e) => {

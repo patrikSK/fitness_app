@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useLayoutEffect } from "react";
 
 // components
 import UniversalBlock from "../components/UniversalBlock";
@@ -10,15 +10,19 @@ import "../css/search.css";
 
 const ExercisesPage = () => {
   const [page, setPage] = useState(0);
-  const [searchText, setSearchText] = useState("");
+  const {
+    isLoading,
+    errMessage,
+    searchedExercises,
+    paginatedExercises,
+    searchText,
+    dispatchExercises,
+    numOfExercises,
+  } = useExercises();
 
-  const { isLoading, errMessage, getExercisesByPage, getSearchExercises } =
-    useExercises();
-  const exercises = useMemo(() => getExercisesByPage(page), [page, getExercisesByPage]);
-  const searchedExercises = useMemo(
-    () => getSearchExercises(searchText),
-    [searchText, getSearchExercises]
-  );
+  useLayoutEffect(() => {
+    dispatchExercises({ type: "setPaginatedExercises", value: page });
+  }, [dispatchExercises, page]);
 
   const prevPage = () => {
     setPage((prev) => prev - 1);
@@ -28,7 +32,7 @@ const ExercisesPage = () => {
     setPage((prev) => prev + 1);
   };
 
-  const ExerciseList = exercises.map((exercise) => {
+  const ExerciseList = paginatedExercises.map((exercise) => {
     return (
       <UniversalBlock
         key={exercise.id.toString()}
@@ -62,11 +66,13 @@ const ExercisesPage = () => {
               type="text"
               value={searchText}
               placeholder="tap to search"
-              onChange={(e) => setSearchText(e.target.value)}
+              onChange={(e) =>
+                dispatchExercises({ type: "setSearchText", value: e.target.value })
+              }
             />
           </div>
 
-          {searchText !== "" ? (
+          {searchText ? (
             <ul className="exercises-wrapper">
               {searchedExercises.length !== 0 ? (
                 searchedExercisesList
@@ -80,7 +86,7 @@ const ExercisesPage = () => {
                 <button onClick={prevPage} disabled={page === 0}>
                   prev
                 </button>
-                <button onClick={nextPage} disabled={exercises.length !== 9}>
+                <button onClick={nextPage} disabled={(page + 1) * 9 >= numOfExercises}>
                   next
                 </button>
               </nav>
