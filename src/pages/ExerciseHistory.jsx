@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
 
+// components
 import Header from "../components/Header";
 import HistoryChart from "../components/HistoryChart";
+// hooks
 import useFetchData from "../hooks/useFetchData";
+// css"
 import "../css/history.css";
 import "../css/exerciseHistory.css";
 

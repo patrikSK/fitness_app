@@ -1,23 +1,24 @@
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 
+// components
 import Header from "../components/Header";
-import useFetchData from "../hooks/useFetchData";
+// hooks
+import useHistory from "../hooks/useHistory";
+// helper fns
+import { getUniqueDates, dateWithMontName } from "../helpers/dateHandlers";
+// css
 import "../css/history.css";
 
 const HistoryPage = () => {
-  const [dates, setDates] = useState([]);
+  const { allRecords, isLoading, errMessage } = useHistory();
 
-  // fetch dates
-  const { data, isLoading, errMessage } = useFetchData("/history/dates");
-  useEffect(() => {
-    data && setDates(data.dates);
-  }, [data]);
+  const dates = useMemo(() => getUniqueDates(allRecords), [allRecords]);
 
-  const datesList = dates.map(({ date }) => (
+  const datesList = dates.map((date) => (
     <li key={date} className="exercise-element">
       <Link to={date}>
-        <p>{date}</p>
+        <p>{dateWithMontName(date)}</p>
       </Link>
     </li>
   ));
