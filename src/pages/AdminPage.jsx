@@ -1,13 +1,18 @@
 import { useEffect, useState, useRef } from "react";
 
+// components
 import InfoMessage from "../components/InfoMessage";
 import Header from "../components/Header";
+// hooks
 import useFetchData from "../hooks/useFetchData";
 import useCloseOverlay from "../hooks/useCloseOverlay";
-import api from "../api/api";
+// css
 import "../css/admin.css";
 
+import api from "../api/api";
+
 const AdminPage = () => {
+  const [allUsers, setAllUsers] = useState([]);
   const [user, setUser] = useState([]);
   const [date, setDate] = useState("");
   const [errMessageUserDetail, setErrMessageUserDetail] = useState("");
@@ -18,19 +23,16 @@ const AdminPage = () => {
   const [success, setSuccess] = useState(false);
   const closeInfoMessage = () => setInfoMessage("");
 
-  // handle close overlay(modal)
-  const overlayRef = useRef(null);
-  const { closeOverlayOnClick, closeOverlayOnEscape } = useCloseOverlay();
-  useEffect(() => {
-    overlayRef.current && overlayRef.current.focus();
-  }, [overlay]);
-
   // fetch list of users from server
   const {
-    data: allUsers,
-    isLoading: isLoadingUsers,
+    data,
+    isLoading,
     errMessage: errMessageUsers,
   } = useFetchData("/users/allUsers");
+
+  useEffect(() => {
+    data && setAllUsers(data);
+  }, [data]);
 
   // fetch single user data from server and show
   const showUserDetails = async (e, id) => {
@@ -90,16 +92,23 @@ const AdminPage = () => {
     );
   });
 
+  // handle close overlay(modal)
+  const overlayRef = useRef(null);
+  const { closeOverlayOnClick, closeOverlayOnEscape } = useCloseOverlay();
+  useEffect(() => {
+    overlayRef.current && overlayRef.current.focus();
+  }, [overlay]);
+
   return (
     <>
       <Header text="admin panel" backButton={false} />
       <main className="admin-page">
         <div className="container">
           <div className="user-list-wrapper">
-            {isLoadingUsers && <p>Loading...</p>}
+            {isLoading && <p>Loading...</p>}
             <h3>list of all users, tap to show details</h3>
             {errMessageUsers && <p>{errMessageUsers}</p>}
-            {!errMessageUsers && !isLoadingUsers && (
+            {!errMessageUsers && !isLoading && (
               <table>
                 <tbody>
                   <tr>
