@@ -1,43 +1,46 @@
 /*........main header.......*/
-header{
-    background-color: var(--violet);
+header {
+  background-color: var(--violet);
+  box-shadow: 0px 4px 3px #13111129;
+  position: relative;
+  z-index: 5;
 }
 
-.header h1{
-    color: white;
-    text-align: center;
-    font-size: 2.5em;
-    text-transform: uppercase;
-    margin: 0 !important;
-    padding: 0.9rem 0;
+.header h1 {
+  color: white;
+  text-align: center;
+  font-size: 2.5em;
+  text-transform: uppercase;
+  margin: 0 !important;
+  padding: 0.9rem 0;
 }
 
-.back-button{
-    position: absolute;
-    top: 15px;
-    left: 25px;
-    cursor: pointer;
+.back-button {
+  position: absolute;
+  top: 15px;
+  left: 25px;
+  cursor: pointer;
 }
 
-.back-button svg{
-    color: white;
-    font-size: 1.2rem;
-    display: none;
+.back-button svg {
+  color: white;
+  font-size: 1.2rem;
+  display: none;
 }
 
 @media (max-width: 480px) {
-    .container {
-        margin: 0;
-        padding: 0;
-    }
+  .container {
+    margin: 0;
+    padding: 0;
+  }
 
-    .header h1{
-        font-size: 1.7rem;
-        margin: 0;
-        padding: 0.6rem 0;
-    }
+  .header h1 {
+    font-size: 1.7rem;
+    margin: 0;
+    padding: 0.6rem 0;
+  }
 
-    .back-button svg{
-        display: inline;
-    }
+  .back-button svg {
+    display: inline;
+  }
 }
