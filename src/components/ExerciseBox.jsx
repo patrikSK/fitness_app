@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
 import useRole from "../hooks/useRole";
-import "../css/exercise.css";
+import "../css/exerciseBox.css";
 
 //universal box for programs and exercises
-const UniversalBlock = ({ item, deleteItem, url, itemName }) => {
+const ExerciseBox = ({ item, deleteItem, url, itemName }) => {
   const { role } = useRole();
 
   return (
@@ -12,6 +14,8 @@ const UniversalBlock = ({ item, deleteItem, url, itemName }) => {
       <Link to={`${url}${item.id}`} state={{ [itemName]: item }}>
         <p>{item.name}</p>
       </Link>
+
+      <FontAwesomeIcon icon={faAngleRight} />
 
       {role === "ADMIN" && deleteItem && (
         <div className="delete-button-wrapper">
@@ -22,4 +26,4 @@ const UniversalBlock = ({ item, deleteItem, url, itemName }) => {
   );
 };
 
-export default UniversalBlock;
+export default ExerciseBox;

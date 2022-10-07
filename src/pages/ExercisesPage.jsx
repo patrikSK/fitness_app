@@ -1,7 +1,7 @@
 import { useState, useLayoutEffect } from "react";
 
 // components
-import UniversalBlock from "../components/UniversalBlock";
+import ExerciseBox from "../components/ExerciseBox";
 import Header from "../components/Header";
 // hooks
 import useExercises from "../hooks/useExercises";
@@ -34,7 +34,7 @@ const ExercisesPage = () => {
 
   const ExerciseList = paginatedExercises.map((exercise) => {
     return (
-      <UniversalBlock
+      <ExerciseBox
         key={exercise.id.toString()}
         item={exercise}
         deleteItem={false}
@@ -46,7 +46,7 @@ const ExercisesPage = () => {
 
   const searchedExercisesList = searchedExercises.map((exercise) => {
     return (
-      <UniversalBlock
+      <ExerciseBox
         key={exercise.id.toString()}
         item={exercise}
         deleteItem={false}

@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 // components
 import Header from "../components/Header";
 import InfoMessage from "../components/InfoMessage";
-import UniversalBlock from "../components/UniversalBlock";
+import ExerciseBox from "../components/ExerciseBox";
 // hooks
 import useRole from "../hooks/useRole";
 import useExercises from "../hooks/useExercises";
@@ -104,7 +104,7 @@ const ProgramPage = () => {
 
   const ExerciseList = exercises.map((exercise) => {
     return (
-      <UniversalBlock
+      <ExerciseBox
         key={exercise.id.toString()}
         item={exercise}
         deleteItem={deleteExercise}
