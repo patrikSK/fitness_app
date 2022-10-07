@@ -37,7 +37,6 @@ const ExercisesPage = () => {
       <ExerciseBox
         key={exercise.id.toString()}
         item={exercise}
-        deleteItem={false}
         url="/exercise/"
         itemName="exrcs"
       />
@@ -49,7 +48,6 @@ const ExercisesPage = () => {
       <ExerciseBox
         key={exercise.id.toString()}
         item={exercise}
-        deleteItem={false}
         url="/exercise/"
         itemName="exrcs"
       />

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -24,6 +25,13 @@ const ExerciseBox = ({ item, deleteItem, url, itemName }) => {
       )}
     </li>
   );
+};
+
+ExerciseBox.propTypes = {
+  item: PropTypes.object,
+  deleteItem: PropTypes.func,
+  url: PropTypes.string,
+  itemName: PropTypes.string,
 };
 
 export default ExerciseBox;
