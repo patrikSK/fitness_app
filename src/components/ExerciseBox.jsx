@@ -28,10 +28,10 @@ const ExerciseBox = ({ item, deleteItem, url, itemName }) => {
 };
 
 ExerciseBox.propTypes = {
-  item: PropTypes.object,
-  deleteItem: PropTypes.func,
-  url: PropTypes.string,
-  itemName: PropTypes.string,
+  item: PropTypes.object.isRequired, //object containt exercise or program
+  deleteItem: PropTypes.func, // callback fn to delete action
+  url: PropTypes.string.isRequired, // this string will be appended to base URL
+  itemName: PropTypes.string.isRequired, // name of provided item
 };
 
 export default ExerciseBox;
