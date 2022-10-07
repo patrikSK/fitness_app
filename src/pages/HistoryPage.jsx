@@ -6,7 +6,8 @@ import Header from "../components/Header";
 // hooks
 import useHistory from "../hooks/useHistory";
 // helper fns
-import { getUniqueDates, dateWithMontName } from "../helpers/dateHandlers";
+import { dateWithMontName } from "../helpers/dateHandlers";
+import { getUniqueDates } from "../helpers/historyHandler";
 // css
 import "../css/history.css";
 

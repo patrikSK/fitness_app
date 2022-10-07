@@ -8,6 +8,7 @@ import InfoMessageWithDispatch from "../components/InfoMessageWithDispatch";
 import useCloseOverlay from "../hooks/useCloseOverlay";
 import useRole from "../hooks/useRole";
 import useExercises from "../hooks/useExercises";
+import useHistory from "../hooks/useHistory";
 // css
 import "../css/exercisePage.css";
 
@@ -88,6 +89,7 @@ const ExercisePage = () => {
   const { role } = useRole();
   const { exerciseId } = useParams();
   const { exercises, dispatchExercises } = useExercises();
+  const { dispatchHistory } = useHistory();
 
   const exercise = useMemo(
     () => exercises.filter((exercise) => exercise.id === exerciseId)[0],
@@ -110,7 +112,8 @@ const ExercisePage = () => {
     };
 
     try {
-      await api.post(url, data, headers);
+      const res = await api.post(url, data, headers);
+      dispatchHistory({ type: "addToHistory", value: res.data.exercise });
       dispatch({ type: "successInfoMessage", value: "history was succesfuly updated" });
     } catch (err) {
       dispatch({ type: "errorInfoMessage", value: "Error: history was not updated" });

@@ -24,20 +24,4 @@ const dayAndMonth = (date = "") => {
   return `${splitedDate[2]}. ${splitedDate[1]}.`;
 };
 
-/**
- *
- * @param {[]} records
- * return array of unique dates from allrecords
- * @returns {string[]}
- */
-const getUniqueDates = (records = []) => {
-  let dates = [];
-  records.forEach((record) => {
-    if (!dates.includes(record.date)) {
-      dates.push(record.date);
-    }
-  });
-  return dates;
-};
-
-export { dateWithMontName, dayAndMonth, getUniqueDates };
+export { dateWithMontName, dayAndMonth };

@@ -18,7 +18,7 @@ import WelcomePage from "./pages/WelcomePage";
 import ExercisePage from "./pages/ExercisePage";
 import HistoryPage from "./pages/HistoryPage";
 import HistoryExercisesPage from "./pages/HistoryExercisesPage";
-import ExerciseHistory from "./pages/ExerciseHistory";
+import ExerciseHistoryPage from "./pages/ExerciseHistoryPage";
 
 //components
 import RequireAuth from "./components/RequireAuth";
@@ -66,7 +66,10 @@ function App() {
               <Route path="exercise/:exerciseId" element={<ExercisePage />} />
               <Route path="history" element={<HistoryPage />} />
               <Route path="history/:date" element={<HistoryExercisesPage />} />
-              <Route path="history/exercise/:exerciseId" element={<ExerciseHistory />} />
+              <Route
+                path="history/exercise/:exerciseId"
+                element={<ExerciseHistoryPage />}
+              />
               <Route path="profile" element={<ProfilePage />} />
             </Route>
             {/*.......admin routes.......*/}

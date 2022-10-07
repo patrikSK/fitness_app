@@ -1,29 +1,27 @@
-import { useState, useEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useState, useMemo } from "react";
+import { useParams } from "react-router-dom";
 
 // components
 import Header from "../components/Header";
 import HistoryChart from "../components/HistoryChart";
 // hooks
-import useFetchData from "../hooks/useFetchData";
+import useHistory from "../hooks/useHistory";
+// helper fn
+import { getOneExerciseRecords } from "../helpers/historyHandler";
 // css"
 import "../css/history.css";
 import "../css/exerciseHistory.css";
 
-const ExerciseHistory = () => {
+const ExerciseHistoryPage = () => {
   const { exerciseId } = useParams();
 
-  const location = useLocation();
-  const { exerciseName } = location.state;
-
-  const [records, setRecords] = useState([]);
   const [currentChart, setCurrentChart] = useState("weight");
 
-  // fetch exercises in records
-  const { data, isLoading, errMessage } = useFetchData(`/history/exercise/${exerciseId}`);
-  useEffect(() => {
-    data && setRecords(data.oneExerciseRecords);
-  }, [data]);
+  const { allRecords } = useHistory();
+  const records = useMemo(
+    () => getOneExerciseRecords(allRecords, exerciseId),
+    [allRecords, exerciseId]
+  );
 
   const recordsList = records.map((record) => (
     <li key={record.id} className="exercise-element">
@@ -35,30 +33,28 @@ const ExerciseHistory = () => {
 
   return (
     <>
-      <Header text={exerciseName} backButton={true} />
+      <Header text={records[0].exerciseName} backButton={true} />
       <main className="history-page">
         <div className="container">
-          {isLoading && <p>Loading...</p>}
-          {errMessage && <p>{errMessage}</p>}
-          {!isLoading && !errMessage && <ul className="records-list">{recordsList}</ul>}
+          <ul className="records-list">{recordsList}</ul>
           <div className="switch-chart-wrapper">
             <button
               onClick={() => setCurrentChart("weight")}
-              className={currentChart === "weight" && "chart-active"}
+              className={currentChart === "weight" ? "chart-active" : undefined}
             >
               weight
             </button>
             <button
               onClick={() => setCurrentChart("reps")}
-              className={currentChart === "reps" && "chart-active"}
+              className={currentChart === "reps" ? "chart-active" : undefined}
             >
               reps
             </button>
             <button
               onClick={() => setCurrentChart("performance")}
-              className={currentChart === "performance" && "chart-active"}
+              className={currentChart === "performance" ? "chart-active" : undefined}
             >
-              performance
+              0 performance
             </button>
           </div>
           <HistoryChart records={records} type={currentChart} />
@@ -68,4 +64,4 @@ const ExerciseHistory = () => {
   );
 };
 
-export default ExerciseHistory;
+export default ExerciseHistoryPage;

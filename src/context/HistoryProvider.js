@@ -14,46 +14,10 @@ const reducer = (state, action) => {
         ...state,
         allRecords: action.value,
       };
-    case "addExercise":
+    case "addToHistory":
       return {
         ...state,
-        exercises: [...state.exercises, action.value],
-      };
-    case "updateExercise":
-      const updatedExercises = state.exercises.map((exercise) => {
-        return exercise.id === action.id
-          ? { ...exercise, ...action.updatedExercise }
-          : exercise;
-      });
-      return {
-        ...state,
-        exercises: updatedExercises,
-      };
-    case "removeExercise":
-      return {
-        ...state,
-        exercises: state.exercises.filter(
-          (exercise) => exercise.id !== action.exerciseId
-        ),
-      };
-    case "searchExercises":
-      return {
-        ...state,
-        searchedExercises: state.exercises.filter((exercise) =>
-          exercise.name.toLowerCase().includes(state.searchText.toLowerCase())
-        ),
-      };
-    case "setPaginatedExercises":
-      const startIndex = action.value * 9;
-      const endIndex = action.value * 9 + 9;
-      return {
-        ...state,
-        paginatedExercises: state.exercises.slice(startIndex, endIndex),
-      };
-    case "setSearchText":
-      return {
-        ...state,
-        searchText: action.value,
+        allRecords: [...state.allRecords, action.value],
       };
     default:
       throw new Error("you provide wrong action");
@@ -72,11 +36,7 @@ export const HistoryProvider = ({ children }) => {
       console.log("fetching records!");
     }
   }, [role, data]);
-  /*
-  useEffect(() => {
-    dispatchHistory({ type: "setDates" });
-  }, [state.allRecords]);
-*/
+
   return (
     <HistoryContext.Provider
       value={{
