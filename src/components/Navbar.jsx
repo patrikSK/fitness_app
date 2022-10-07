@@ -43,10 +43,10 @@ const Navbar = () => {
                 <span>history</span>
               </CustomLink>
               <div className="dropdown">
-                <li className="dropdown-button" onClick={toggleMenu}>
+                <div className="dropdown-button" onClick={toggleMenu}>
                   <FontAwesomeIcon icon={faUser} />
                   <span>user</span>
-                </li>
+                </div>
                 <div className={hidden ? "hidden" : "dropdown-menu"}>
                   <CustomLink to="profile" onClick={toggleMenu}>
                     profile
