@@ -9,7 +9,7 @@ const RequireAuth = ({ allowedRoles }) => {
   if (allowedRoles.includes(role)) {
     return <Outlet />;
   } else {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
 };
 
