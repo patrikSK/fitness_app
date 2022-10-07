@@ -30,6 +30,7 @@ export const HistoryProvider = ({ children }) => {
 
   // fetch and set history records
   const { data, isLoading, errMessage } = useFetchData("/history/allRecords");
+
   useEffect(() => {
     if (role && data) {
       dispatchHistory({ type: "setAllRecords", value: data.allRecords });
