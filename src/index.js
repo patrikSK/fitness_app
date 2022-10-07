@@ -8,6 +8,7 @@ import App from "./App";
 import { RoleProvider } from "./context/RoleProvider";
 import { ProgramsProvider } from "./context/ProgramsProvider";
 import { ExercisesProvider } from "./context/ExercisesProvider";
+import { HistoryProvider } from "./context/HistoryProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -15,7 +16,9 @@ root.render(
     <RoleProvider>
       <ProgramsProvider>
         <ExercisesProvider>
-          <App />
+          <HistoryProvider>
+            <App />
+          </HistoryProvider>
         </ExercisesProvider>
       </ProgramsProvider>
     </RoleProvider>
