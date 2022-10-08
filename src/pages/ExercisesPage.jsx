@@ -75,7 +75,7 @@ const ExercisesPage = () => {
               {searchedExercises.length !== 0 ? (
                 searchedExercisesList
               ) : (
-                <h1>no results</h1>
+                <h1 className="no-result">no results</h1>
               )}
             </ul>
           ) : (
