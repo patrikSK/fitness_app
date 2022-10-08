@@ -18,7 +18,8 @@ const RegisterPage = () => {
     surname: "",
     nickname: "",
     age: 0,
-    password: "",
+    role: "USER",
+    password: "q",
   });
 
   const [matchPassword, setMatchPassword] = useState("");
@@ -57,6 +58,7 @@ const RegisterPage = () => {
       surname: user.surname,
       nickName: user.nickname,
       age: user.age,
+      role: "USER",
     };
 
     try {
@@ -200,7 +202,42 @@ const RegisterPage = () => {
               required
               onChange={(e) => setUser({ ...user, age: e.target.value })}
             />
+            {/*<div className="role-wrapper">
+              <label htmlFor="user">
+                <input
+                  type="radio"
+                  id="user"
+                  name="role"
+                  value="USER"
+                  required
+                  onChange={(e) =>
+                    setUser({
+                      ...user,
+                      role: e.target.value,
+                    })
+                  }
+                />
+                user
+              </label>
 
+              <label htmlFor="admin">
+                <input
+                  type="radio"
+                  id="admin"
+                  name="role"
+                  value="ADMIN"
+                  required
+                  onChange={(e) =>
+                    setUser({
+                      ...user,
+                      role: e.target.value,
+                    })
+                  }
+                />
+                admin
+              </label>
+            </div>
+                */}
             <div className="button-wrapper">
               <button type="submit">sign up</button>
             </div>
