@@ -99,6 +99,12 @@ const ExercisePage = () => {
   const addExerciseToHistry = async (e) => {
     e.preventDefault();
 
+    if (isNaN(state.reps) || isNaN(state.weight)) {
+      dispatch({ type: "errorInfoMessage", value: "reps and weight must be a number" });
+      dispatch({ type: "clearInputs" });
+      return;
+    }
+
     const url = "/history";
     const data = {
       weight: state.weight,
@@ -187,8 +193,8 @@ const ExercisePage = () => {
             </div>
           </div>
 
-          <div className="form">
-            <h3>save completed exercise to history</h3>
+          <div className="form track-exercise-form">
+            <h3>Track exercise</h3>
             <form onSubmit={addExerciseToHistry}>
               <input
                 type="number"
