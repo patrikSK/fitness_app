@@ -30,8 +30,6 @@ const ExerciseBox = ({ item, deleteItem, url, itemName }) => {
   );
 };
 
-/// test renders
-
 ExerciseBox.propTypes = {
   item: PropTypes.object.isRequired, //object containt exercise or program
   deleteItem: PropTypes.func, // callback fn to delete action
