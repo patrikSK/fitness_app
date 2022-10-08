@@ -9,6 +9,9 @@ import { RoleProvider } from "./context/RoleProvider";
 import { ProgramsProvider } from "./context/ProgramsProvider";
 import { ExercisesProvider } from "./context/ExercisesProvider";
 import { HistoryProvider } from "./context/HistoryProvider";
+import { disableReactDevTools } from "@fvilers/disable-react-devtools";
+
+disableReactDevTools();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
