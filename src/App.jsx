@@ -1,10 +1,7 @@
 import { React, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-//hellpers
-import { setAuthToken } from "./helpers/setAuthToken";
-
-//pages
+// pages
 import Layout from "./pages/Layout";
 import LoginPage from "./pages/LoginPage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -19,32 +16,28 @@ import ExercisePage from "./pages/ExercisePage";
 import HistoryPage from "./pages/HistoryPage";
 import HistoryExercisesPage from "./pages/HistoryExercisesPage";
 import ExerciseHistoryPage from "./pages/ExerciseHistoryPage";
-
-//components
+// components
 import RequireAuth from "./components/RequireAuth";
 import UnrequireAuth from "./components/UnrequireAuth";
-
-//custom hooks
+// hooks
 import useRole from "./hooks/useRole";
+// hellper fn
+import { setAuthToken } from "./helpers/setAuthToken";
 
 function App() {
   const { setRole } = useRole();
 
+  //check if jwt token is stored in local storage,
+  //and than mount/unmount token to every request to authorization header
   useEffect(() => {
-    //check if jwt token is stored in local storage, and than mount/unmount token to every request to authorization header
     const token = localStorage.getItem("token");
-    if (token) {
-      setAuthToken(token);
-    }
+    token && setAuthToken(token);
   }, []);
 
+  //get role from local storage and set to setAuth after page reload
   useEffect(() => {
-    //get role from local storage and set to setAuth after page reload
     const role = localStorage.getItem("role");
-
-    if (role) {
-      setRole(role);
-    }
+    role && setRole(role);
   }, [setRole]);
 
   return (
