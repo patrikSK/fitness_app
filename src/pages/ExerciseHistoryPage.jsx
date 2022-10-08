@@ -4,10 +4,11 @@ import { useParams } from "react-router-dom";
 // components
 import Header from "../components/Header";
 import HistoryChart from "../components/HistoryChart";
+import HistoryRecord from "../components/HistoryRecord";
 // hooks
 import useHistory from "../hooks/useHistory";
 // helper fn
-import { getOneExerciseRecords } from "../helpers/historyHandler";
+import { getOneExerciseRecords, getUniqueDates } from "../helpers/historyHandler";
 // css"
 import "../css/history.css";
 import "../css/exerciseHistory.css";
@@ -23,20 +24,18 @@ const ExerciseHistoryPage = () => {
     [allRecords, exerciseId]
   );
 
-  const recordsList = records.map((record) => (
-    <li key={record.id} className="exercise-element">
-      <p>{record.date}</p>
-      <p>{record.reps}</p>
-      <p>{record.weight}</p>
-    </li>
-  ));
+  const dates = useMemo(() => getUniqueDates(records), [records]);
+
+  const historyRecords = dates.map((date) => {
+    const oneDateRecords = records.filter((record) => record.date === date);
+    return <HistoryRecord records={oneDateRecords} date={date} key={date} />;
+  });
 
   return (
     <>
       <Header text={records[0].exerciseName} backButton={true} />
       <main className="history-page">
         <div className="container">
-          <ul className="records-list">{recordsList}</ul>
           <div className="switch-chart-wrapper">
             <button
               onClick={() => setCurrentChart("weight")}
@@ -58,6 +57,7 @@ const ExerciseHistoryPage = () => {
             </button>
           </div>
           <HistoryChart records={records} type={currentChart} />
+          <div className="history-records-wrapper">{historyRecords}</div>
         </div>
       </main>
     </>

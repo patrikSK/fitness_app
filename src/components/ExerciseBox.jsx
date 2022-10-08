@@ -14,9 +14,12 @@ const ExerciseBox = ({ item, deleteItem, url, itemName }) => {
     <li className="exercise-element">
       <Link to={`${url}${item.id}`} state={{ [itemName]: item }}>
         <p>{item.name}</p>
-      </Link>
 
-      <FontAwesomeIcon icon={faAngleRight} />
+        <FontAwesomeIcon
+          icon={faAngleRight}
+          style={{ right: deleteItem ? "72px" : "27px" }}
+        />
+      </Link>
 
       {role === "ADMIN" && deleteItem && (
         <div className="delete-button-wrapper">
@@ -26,6 +29,8 @@ const ExerciseBox = ({ item, deleteItem, url, itemName }) => {
     </li>
   );
 };
+
+/// test renders
 
 ExerciseBox.propTypes = {
   item: PropTypes.object.isRequired, //object containt exercise or program

@@ -1,5 +1,7 @@
 import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
 // components
 import Header from "../components/Header";
@@ -24,6 +26,7 @@ const HistoryExercisesPage = () => {
     <li key={exercise.id} className="exercise-element">
       <Link to={`/history/exercise/${exercise.id}`}>
         <p>{exercise.name}</p>
+        <FontAwesomeIcon icon={faAngleRight} />
       </Link>
     </li>
   ));

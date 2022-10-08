@@ -1,0 +1,50 @@
+.history-record-block {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  margin: 0.5rem 0;
+  background-color: antiquewhite;
+}
+
+.date-part {
+  background-color: var(--violet);
+  color: white;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  display: flex;
+  align-items: center;
+  flex-basis: 0rem;
+}
+
+.date-wrapper {
+  padding: 0.6rem 0.5rem;
+}
+
+.date-part li:first-child {
+  font-size: 1.7rem;
+  font-weight: 600;
+}
+
+.date-part li:nth-child(2) {
+  margin-bottom: 4px;
+}
+
+.lists-part {
+  display: flex;
+  flex-grow: 1;
+  justify-content: space-around;
+}
+
+.records-header {
+  color: var(--violet);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.list-wrapper {
+  color: #1e1e1e;
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 0.5rem 0;
+}

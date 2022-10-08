@@ -1,50 +1,18 @@
-.records-list dt{
-    max-width: 393px;
-    margin: 0 auto;
-    border: 1px solid var(--blue);
-    background-color: var(--tyrkys);
-    padding: 0.5rem 5rem;
-    text-align: center;
-    cursor: pointer;
-}
-
 .records-list li {
-    max-width: 393px;
-    margin: 0 auto;
-    border: 1px solid var(--pink);
+  max-width: 393px;
+  margin: 0 auto;
+  margin-bottom: 5px;
 }
 
-.records-list span {
-    display: inline-block;
-    padding: 8px 0;
+@media (max-width: 480px) {
+  .records-list li {
+    margin-bottom: 0;
+    max-width: 100%;
+  }
 }
 
-.records-list span:nth-child(1) {
-    width: 50%;
-    text-align: center;
-}
-.records-list span:nth-child(2) {
-    width: 25%;
-}
-.records-list span:nth-child(3) {
-    width: 25%;
-}
-
-.date-wrapper{
-    max-height: 37px;
-    overflow: hidden;
-    transition: max-height 0.5s linear;
-}
-
-.date-wrapper-open {
-    max-height: 500px;
-    overflow: auto;
-    transition: max-height 0.5s linear;
-    scrollbar-width: none
-}
-
-@media (min-width: 480px){
-    .records-list{
-        margin-top: 20px;
-    }
+@media (min-width: 480px) {
+  .records-list {
+    margin-top: 20px;
+  }
 }

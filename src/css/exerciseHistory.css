@@ -1,7 +1,7 @@
 .switch-chart-wrapper {
   max-width: 393px;
   margin: 0 auto;
-  padding: 20px 0;
+  padding: 20px 10px;
   display: flex;
   justify-content: space-between;
 }
@@ -24,4 +24,11 @@
   padding: 0.5em 1em;
   cursor: pointer;
   margin-top: 10px;
+}
+
+.history-records-wrapper {
+  padding-left: 10px;
+  max-width: 393px;
+  margin: 0 auto;
+  margin-bottom: 60px;
 }

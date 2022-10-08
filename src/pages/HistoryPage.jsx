@@ -1,5 +1,7 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
 // components
 import Header from "../components/Header";
@@ -20,6 +22,7 @@ const HistoryPage = () => {
     <li key={date} className="exercise-element">
       <Link to={date}>
         <p>{dateWithMontName(date)}</p>
+        <FontAwesomeIcon icon={faAngleRight} />
       </Link>
     </li>
   ));
