@@ -3,7 +3,6 @@ header {
   background-color: var(--violet);
   box-shadow: 0px 4px 3px #13111129;
   position: relative;
-  z-index: 5;
 }
 
 .header h1 {

@@ -41,19 +41,19 @@ const ExerciseHistoryPage = () => {
               onClick={() => setCurrentChart("weight")}
               className={currentChart === "weight" ? "chart-active" : undefined}
             >
-              weight
+              Weight
             </button>
             <button
               onClick={() => setCurrentChart("reps")}
               className={currentChart === "reps" ? "chart-active" : undefined}
             >
-              reps
+              Reps
             </button>
             <button
               onClick={() => setCurrentChart("performance")}
               className={currentChart === "performance" ? "chart-active" : undefined}
             >
-              performance
+              Performance
             </button>
           </div>
           <HistoryChart records={records} type={currentChart} />
