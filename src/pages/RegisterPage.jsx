@@ -3,11 +3,7 @@ import { useState, useEffect } from "react";
 
 import api from "../api/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCheck,
-  faTimes,
-  faInfoCircle,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import "../css/auth.css";
 import logo from "../images/logo.png";
 
@@ -22,7 +18,6 @@ const RegisterPage = () => {
     surname: "",
     nickname: "",
     age: 0,
-    role: "",
     password: "",
   });
 
@@ -34,9 +29,7 @@ const RegisterPage = () => {
 
   useEffect(() => {
     setValidPassword(PASSWORD_REGEX.test(user.password));
-    user.password === matchPassword
-      ? setValidMatch(true)
-      : setValidMatch(false);
+    user.password === matchPassword ? setValidMatch(true) : setValidMatch(false);
   }, [user.password, matchPassword]);
 
   const handleSubmit = async (e) => {
@@ -64,7 +57,6 @@ const RegisterPage = () => {
       surname: user.surname,
       nickName: user.nickname,
       age: user.age,
-      role: user.role,
     };
 
     try {
@@ -89,7 +81,12 @@ const RegisterPage = () => {
         <div className="logo">
           <img src={logo} alt="logo" width="260px" height="60px" />
         </div>
+
         <div className="form">
+          <h1>
+            please dont provide any real personal information!!! this is only testing
+            version of app
+          </h1>
           <h3>sign up to continue</h3>
           {errMsg && <p className="err-message">{errMsg}</p>}
           <form onSubmit={handleSubmit}>
@@ -143,9 +140,7 @@ const RegisterPage = () => {
               <FontAwesomeIcon
                 icon={faTimes}
                 className={
-                  validPassword || user.password === ""
-                    ? "hidden"
-                    : "bad-pass-icon"
+                  validPassword || user.password === "" ? "hidden" : "bad-pass-icon"
                 }
               />
               <FontAwesomeIcon
@@ -155,9 +150,7 @@ const RegisterPage = () => {
             </div>
             <div
               className={
-                validPassword || user.password === ""
-                  ? "hidden"
-                  : "password-info"
+                validPassword || user.password === "" ? "hidden" : "password-info"
               }
             >
               <FontAwesomeIcon icon={faInfoCircle} />
@@ -180,25 +173,19 @@ const RegisterPage = () => {
               <FontAwesomeIcon
                 icon={faCheck}
                 className={
-                  validPassword && validMatch
-                    ? "good-pass-icon match"
-                    : "hidden"
+                  validPassword && validMatch ? "good-pass-icon match" : "hidden"
                 }
               />
 
               <FontAwesomeIcon
                 icon={faTimes}
                 className={
-                  !validMatch && matchPassword !== ""
-                    ? "bad-pass-icon match"
-                    : "hidden"
+                  !validMatch && matchPassword !== "" ? "bad-pass-icon match" : "hidden"
                 }
               />
             </div>
             <div
-              className={
-                !validMatch && matchPassword !== "" ? "password-info" : "hidden"
-              }
+              className={!validMatch && matchPassword !== "" ? "password-info" : "hidden"}
             >
               <FontAwesomeIcon icon={faInfoCircle} />
               Both passwords must <br /> be the same
@@ -213,41 +200,6 @@ const RegisterPage = () => {
               required
               onChange={(e) => setUser({ ...user, age: e.target.value })}
             />
-            <div className="role-wrapper">
-              <label htmlFor="user">
-                <input
-                  type="radio"
-                  id="user"
-                  name="role"
-                  value="USER"
-                  required
-                  onChange={(e) =>
-                    setUser({
-                      ...user,
-                      role: e.target.value,
-                    })
-                  }
-                />
-                user
-              </label>
-
-              <label htmlFor="admin">
-                <input
-                  type="radio"
-                  id="admin"
-                  name="role"
-                  value="ADMIN"
-                  required
-                  onChange={(e) =>
-                    setUser({
-                      ...user,
-                      role: e.target.value,
-                    })
-                  }
-                />
-                admin
-              </label>
-            </div>
 
             <div className="button-wrapper">
               <button type="submit">sign up</button>
