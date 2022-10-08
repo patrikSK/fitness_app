@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -54,3 +56,8 @@ export default function HistoryChart({ records, type }) {
 
   return <Line options={options} data={data} />;
 }
+
+HistoryChart.propTypes = {
+  records: PropTypes.array.isRequired,
+  type: PropTypes.string.isRequired, // type of graph
+};
