@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Header from "../components/Header";
 import InfoMessage from "../components/InfoMessage";
 import ExerciseBox from "../components/ExerciseBox";
+import RandomNumber from "../components/RandomNumber";
 // hooks
 import useRole from "../hooks/useRole";
 import usePrograms from "../hooks/usePrograms";
@@ -18,8 +19,9 @@ const ProgramsPage = () => {
 
   const [overlay, setOverlay] = useState(false);
 
-  const [infoMessage, setInfoMessage] = useState("");
   const [success, setSuccess] = useState(false);
+  const [infoMessage, setInfoMessage] = useState("");
+
   const closeInfoMessage = () => setInfoMessage("");
 
   const { role } = useRole();
@@ -147,7 +149,7 @@ const ProgramsPage = () => {
           )}
         </div>
       </main>
-      <h1 style={{ color: "red" }}>{Math.floor(Math.random() * 10)}</h1>
+      <RandomNumber />
       <InfoMessage
         message={infoMessage}
         success={success}
