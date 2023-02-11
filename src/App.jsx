@@ -16,6 +16,7 @@ import ExercisePage from "./pages/ExercisePage";
 import HistoryPage from "./pages/HistoryPage";
 import HistoryExercisesPage from "./pages/HistoryExercisesPage";
 import ExerciseHistoryPage from "./pages/ExerciseHistoryPage";
+import Workouts from "./pages/Workouts";
 // components
 import RequireAuth from "./components/RequireAuth";
 import UnrequireAuth from "./components/UnrequireAuth";
@@ -57,6 +58,7 @@ function App() {
               <Route path="exercises" element={<ExercisesPage />} />
               <Route path="programs/:programId" element={<ProgramPage />} />
               <Route path="exercise/:exerciseId" element={<ExercisePage />} />
+              <Route path="workouts" element={<Workouts />} />
               <Route path="history" element={<HistoryPage />} />
               <Route path="history/:date" element={<HistoryExercisesPage />} />
               <Route
