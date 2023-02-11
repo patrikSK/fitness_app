@@ -10,6 +10,7 @@ import {
   faMagnifyingGlass,
   faClockRotateLeft,
   faUser,
+  faRectangleList,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Navbar = () => {
@@ -37,6 +38,10 @@ const Navbar = () => {
               <CustomLink to="exercises">
                 <FontAwesomeIcon icon={faMagnifyingGlass} />
                 <span>exercises</span>
+              </CustomLink>
+              <CustomLink to="workouts">
+                <FontAwesomeIcon icon={faRectangleList} />
+                <span>workouts</span>
               </CustomLink>
               <CustomLink to="history">
                 <FontAwesomeIcon icon={faClockRotateLeft} />
