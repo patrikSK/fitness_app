@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Header from "../components/Header";
 import InfoMessage from "../components/InfoMessage";
 import ExerciseBox from "../components/ExerciseBox";
+import RandomNumber from "../components/RandomNumber";
 // hooks
 import useRole from "../hooks/useRole";
 import usePrograms from "../hooks/usePrograms";
@@ -145,6 +146,7 @@ const ProgramsPage = () => {
           )}
         </div>
       </main>
+      <RandomNumber />
       <InfoMessage
         message={infoMessage}
         success={success}
