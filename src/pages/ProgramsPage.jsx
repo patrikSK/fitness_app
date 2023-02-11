@@ -25,6 +25,8 @@ const ProgramsPage = () => {
   const { role } = useRole();
   const { programs, isLoading, errMessage, setPrograms } = usePrograms();
 
+  console.log("ahoj");
+
   // handle close overlay(modal)
   // catch overlay element
   const overlayRef = useRef(null);
