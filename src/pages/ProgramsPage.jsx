@@ -19,8 +19,9 @@ const ProgramsPage = () => {
 
   const [overlay, setOverlay] = useState(false);
 
-  const [infoMessage, setInfoMessage] = useState("");
   const [success, setSuccess] = useState(false);
+  const [infoMessage, setInfoMessage] = useState("");
+
   const closeInfoMessage = () => setInfoMessage("");
 
   const { role } = useRole();
