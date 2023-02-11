@@ -145,6 +145,7 @@ const ProgramsPage = () => {
           )}
         </div>
       </main>
+      <h1 style={{ color: "red" }}>{Math.floor(Math.random() * 10)}</h1>
       <InfoMessage
         message={infoMessage}
         success={success}
