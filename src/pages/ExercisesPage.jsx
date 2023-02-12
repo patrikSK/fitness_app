@@ -1,8 +1,8 @@
 import { useState, useLayoutEffect } from "react";
 
 // components
-import ExerciseBox from "../components/ExerciseBox";
 import Header from "../components/Header";
+import ExerciseBox from "../components/ExerciseBox";
 // hooks
 import useExercises from "../hooks/useExercises";
 // css
