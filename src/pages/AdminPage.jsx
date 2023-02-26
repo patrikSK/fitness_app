@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 
 // components
 import InfoMessage from "../components/InfoMessage";
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 // hooks
 import useFetchData from "../hooks/useFetchData";
 import useCloseOverlay from "../hooks/useCloseOverlay";

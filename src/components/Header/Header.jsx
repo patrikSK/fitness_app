@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
-import "../css/header.css";
+import "../../css/header.css";
 
 const Header = ({ text, backButton }) => {
   const navigate = useNavigate();

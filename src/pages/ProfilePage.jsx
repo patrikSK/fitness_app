@@ -1,7 +1,7 @@
 import { useEffect, useReducer } from "react";
 
 // components
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 import InfoMessageWithDispatch from "../components/InfoMessageWithDispatch";
 // hooks
 import useFetchData from "../hooks/useFetchData";

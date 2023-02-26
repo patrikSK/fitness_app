@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
 // components
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 // hooks
 import useHistory from "../hooks/useHistory";
 // helper fns

@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useReducer, useEffect, useRef, useMemo } from "react";
 
 // components
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 import InfoMessageWithDispatch from "../components/InfoMessageWithDispatch";
 // hooks
 import useCloseOverlay from "../hooks/useCloseOverlay";

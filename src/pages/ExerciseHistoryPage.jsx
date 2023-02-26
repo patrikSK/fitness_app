@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 
 // components
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 import HistoryChart from "../components/HistoryChart";
 import HistoryRecord from "../components/HistoryRecord";
 // hooks

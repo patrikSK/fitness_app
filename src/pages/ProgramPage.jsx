@@ -2,7 +2,7 @@ import { useParams, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef, useMemo } from "react";
 
 // components
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 import InfoMessage from "../components/InfoMessage";
 import ExerciseBox from "../components/ExerciseBox";
 // hooks
