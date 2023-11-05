@@ -1,11 +1,12 @@
 import { useNavigate, Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-import { setAuthToken } from "../helpers/setAuthToken";
-import useRole from "../hooks/useRole";
-import logo from "../images/logo.png";
-import "../css/auth.css";
-import api from "../api/api";
+import { setAuthToken } from "../../helpers/setAuthToken";
+import useRole from "../../hooks/useRole";
+//import { validateEmail } from "../../helpers/validation";
+import logo from "../../images/logo.png";
+import "../../css/auth.css";
+import api from "../../api/api";
 
 const LoginPage = () => {
   let navigate = useNavigate();
@@ -16,10 +17,6 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
 
   const [errMsg, setErrMsg] = useState("");
-
-  useEffect(() => {
-    setErrMsg("");
-  }, [email, password]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -78,7 +75,7 @@ const LoginPage = () => {
           <h3>Log in to continue</h3>
           {errMsg && <p className="err-message">{errMsg}</p>}
 
-          <form onSubmit={handleSubmit}>
+          <form>
             <input
               type="email"
               name="email"
@@ -87,12 +84,14 @@ const LoginPage = () => {
                 setEmail(e.target.value);
               }}
               required
+              /*noValidate*/
               placeholder="email"
             />
 
             <input
               type="password"
               name="password"
+              id="password"
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
@@ -102,7 +101,7 @@ const LoginPage = () => {
             />
 
             <div className="button-wrapper">
-              <button type="submit">log in</button>
+              <button onClick={handleSubmit}>log in</button>
             </div>
           </form>
           <div className="signup-route">
